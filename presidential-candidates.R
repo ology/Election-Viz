@@ -30,7 +30,7 @@ for (file in filenames) {
     election$Votes.1 <- as.numeric(gsub(',', '', election$Votes.1));
 
     # Save our chart.
-    img <- cat(file, '.png', sep = '');
+    img <- paste(file, '.png', sep = '');
     png(img);
 
     # Render the scatter plot.
