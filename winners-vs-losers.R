@@ -11,7 +11,7 @@
 
 # Read in the election data.
 election <- read.table(
-  '1900.txt',
+  'data/1900.txt',
   header     = TRUE,
   skip       = 2,
   na.strings = '-'
