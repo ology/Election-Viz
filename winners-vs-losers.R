@@ -11,7 +11,6 @@ elections <- read.table(
 );
 
 # Convert "comma numbers" into integers.
-elections$TOTAL   <- as.numeric(gsub(',', '', elections$TOTAL));
 elections$Votes   <- as.numeric(gsub(',', '', elections$Votes));
 elections$Votes.1 <- as.numeric(gsub(',', '', elections$Votes.1));
 
