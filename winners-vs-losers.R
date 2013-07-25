@@ -23,5 +23,10 @@ plot(
 );
 
 # Draw a line with slope=1 as a reference.
-abline(0, 1, lty = 2, col = 'blue');
+abline(
+  a   = 0,
+  b   = 1,
+  lty = 2,
+  col = 'blue'
+);
 
