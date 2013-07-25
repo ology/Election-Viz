@@ -1,8 +1,3 @@
-http://www.presidency.ucsb.edu/elections.php
-
-http://en.wikipedia.org/wiki/List_of_U.S._states_by_historical_population
-
-~
 elections <- read.table(
   '/Users/gene/Data/Elections/presidential/1900.txt',
   header=TRUE,
