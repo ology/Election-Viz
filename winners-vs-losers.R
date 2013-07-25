@@ -1,5 +1,5 @@
 elections <- read.table(
-  '/Users/gene/Data/Elections/presidential/1900.txt',
+  '1900.txt',
   header=TRUE,
   skip=2,
   na.strings="-"
@@ -11,7 +11,7 @@ elections$Votes.1 <- as.numeric(gsub(',', '', elections$Votes.1));
 
 plot(
   elections$Votes, elections$Votes.1, 
-  main='1900 Election', 
+  main = '1900 Election', 
   xlab = 'WILLIAM McKINLEY', 
   ylab = 'WILLIAM J. BRYAN'
 );
