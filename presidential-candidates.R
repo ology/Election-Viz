@@ -29,6 +29,10 @@ for (file in filenames) {
     # Convert the loser numbers into integers.
     election$Votes.1 <- as.numeric(gsub(',', '', election$Votes.1));
 
+    # Save our chart.
+    img <- paste(file, '.png');
+    png(img);
+
     # Render the scatter plot.
     plot(
       election$Votes, election$Votes.1, 
@@ -44,4 +48,6 @@ for (file in filenames) {
       lty = 2,
       col = 'blue'
     );
+
+    dev.off();
 }
