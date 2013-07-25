@@ -1,5 +1,11 @@
 #
-# R code to visualize the winner vs loser in the U.S. presidential election.
+# Visualize two candidates in a U.S. presidential election with R.
+#
+# Each data point is a State.  The position is based on the number of popular
+# votes given to each opponent.  The more votes, the farther "Northeast" the
+# data point.  A point between the diagonal reference line and the axis of a
+# candidate, represents that State "leaning" toward that candidate.
+#
 # -- gene+github at ology dot net not com
 #
 
@@ -11,8 +17,9 @@ election <- read.table(
   na.strings = '-'
 );
 
-# Convert "comma numbers" into integers.
+# Convert the winner numbers into integers.
 election$Votes   <- as.numeric(gsub(',', '', election$Votes));
+# Convert the loser numbers into integers.
 election$Votes.1 <- as.numeric(gsub(',', '', election$Votes.1));
 
 # Render the scatter plot.
@@ -23,7 +30,7 @@ plot(
   ylab = 'WILLIAM J. BRYAN'
 );
 
-# Draw a line with slope=1 as a reference.
+# Draw a slope=1 line as reference.
 abline(
   a   = 0,
   b   = 1,
