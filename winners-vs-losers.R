@@ -4,7 +4,7 @@
 #
 
 # Read in the election data.
-elections <- read.table(
+election <- read.table(
   '1900.txt',
   header     = TRUE,
   skip       = 2,
@@ -12,12 +12,12 @@ elections <- read.table(
 );
 
 # Convert "comma numbers" into integers.
-elections$Votes   <- as.numeric(gsub(',', '', elections$Votes));
-elections$Votes.1 <- as.numeric(gsub(',', '', elections$Votes.1));
+election$Votes   <- as.numeric(gsub(',', '', election$Votes));
+election$Votes.1 <- as.numeric(gsub(',', '', election$Votes.1));
 
 # Render the scatter plot.
 plot(
-  elections$Votes, elections$Votes.1, 
+  election$Votes, election$Votes.1, 
   main = '1900 Election', 
   xlab = 'WILLIAM McKINLEY', 
   ylab = 'WILLIAM J. BRYAN'
