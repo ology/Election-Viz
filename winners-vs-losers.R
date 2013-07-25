@@ -1,5 +1,6 @@
 #
-# Visualize the winner vs loser in the U.S. presidential election
+# R code to visualize the winner vs loser in the U.S. presidential election.
+# -- gene+github at ology dot net not com
 #
 
 # Read in the election data.
