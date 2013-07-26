@@ -3,7 +3,8 @@
 #
 # Each data point is a State.  The position is based on the number of popular
 # votes given to each opponent.  The more votes, the farther "Northeast" the
-# data point.  A point between the diagonal reference line and the axis of a
+# data point.  The reference line is the ideal diagonal given a perfect 50/50
+# split.  A point between the diagonal reference line and the axis of a
 # candidate, represents that State "leaning" toward that candidate.
 #
 # -- gene+github at ology dot net not com
@@ -27,6 +28,9 @@ for (file in filenames) {
     # Convert "periods before letters" back to spaces, in candidate names.
     names(candidates) <- gsub('[.]([A-Z])', ' \\1', names(candidates));
 
+    # Build the chart title from the filename.
+    title <- paste( gsub("^[a-z/]+-([0-9]+)\\.txt$", "\\1", file), 'US Presidential Election' );
+
     # Read the election data.
     election <- read.table(
         file,
@@ -46,7 +50,7 @@ for (file in filenames) {
     # Render the scatter plot.
     plot(
       election$Votes, election$Votes.1, 
-      main = file, 
+      main = title, 
       xlab = paste( names(candidates)[1], candidates[[1]], sep = ' - ' ),
       ylab = paste( names(candidates)[2], candidates[[2]], sep = ' - ' )
     );
