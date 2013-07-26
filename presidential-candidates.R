@@ -18,6 +18,15 @@ filenames <- list.files(
 
 # Process the elections into charts.
 for (file in filenames) {
+    # Read the candidate data.
+    candidates <- read.table(
+        file,
+        header = TRUE,
+        nrows  = 1,
+    );
+    # Convert "periods before letters" back to spaces, in candidate names.
+    names(candidates) <- gsub('[.]([A-Z])', ' \\1', names(candidates));
+
     # Read the election data.
     election <- read.table(
         file,
@@ -38,8 +47,8 @@ for (file in filenames) {
     plot(
       election$Votes, election$Votes.1, 
       main = file, 
-      xlab = 'WINNER', 
-      ylab = 'LOSER'
+      xlab = paste( names(candidates)[1], candidates[[1]], sep = ' - ' ),
+      ylab = paste( names(candidates)[2], candidates[[2]], sep = ' - ' )
     );
 
     # Draw a slope=1 line as reference.
