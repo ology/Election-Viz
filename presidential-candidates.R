@@ -16,7 +16,9 @@ filenames <- list.files(
     full.names = TRUE
 );
 
+# Process the elections into charts.
 for (file in filenames) {
+    # Read the election data.
     election <- read.table(
         file,
         header     = TRUE,
