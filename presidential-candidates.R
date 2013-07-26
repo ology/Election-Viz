@@ -29,7 +29,7 @@ for (file in filenames) {
     names(candidates) <- gsub('[.]([A-Z])', ' \\1', names(candidates));
 
     # Build the chart title from the filename.
-    title <- paste( gsub("^[a-z/]+-([0-9]+)\\.txt$", "\\1", file), 'US Presidential Election' );
+    title <- paste( gsub('^[a-z/]+-([0-9]+)\\.txt$', '\\1', file), 'US Presidential Election' );
 
     # Read the election data.
     election <- read.table(
