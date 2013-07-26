@@ -1,4 +1,4 @@
-				WILLIAM McKINLEY		WILLIAM J. BRYAN
+				"WILLIAM McKINLEY"		"WILLIAM J. BRYAN"
 				Republican			Democratic
 STATE 		TOTAL 		Votes 		% 	EV 	Votes 		% 	EV
 Alabama 	160,477 	55,634 		34.7 	-  	96,368 		60.1 	11

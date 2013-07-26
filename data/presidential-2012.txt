@@ -1,4 +1,4 @@
-				BARACK OBAMA			MITT ROMNEY
+				"BARACK OBAMA"			"MITT ROMNEY"
 				Democrat			Republican
 STATE 		TOTAL 		Votes 		% 	EV 	Votes 		% 	EV
 Alabama 	2,074,338 	795,696 	38.4% 	-  	1,255,925 	60.5% 	9
