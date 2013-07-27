@@ -50,7 +50,7 @@ for (file in filenames) {
     # Render the scatter plot.
     plot(
       election$Votes, election$Votes.1, 
-      main = title, 
+      main = paste( title, '\nBy Popular Vote' ),
       xlab = paste( names(candidates)[1], candidates[[1]], sep = ' - ' ),
       ylab = paste( names(candidates)[2], candidates[[2]], sep = ' - ' )
     );
