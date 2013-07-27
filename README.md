@@ -1,4 +1,5 @@
 Election-Viz
 ============
 
-Visualization of U.S. presidental elections
+Visualize two candidates in a U.S. presidential election with R.
+
