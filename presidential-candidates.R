@@ -49,10 +49,27 @@ for (file in filenames) {
 
     # Render the scatter plot.
     plot(
-      election$Votes, election$Votes.1, 
-      main = paste( title, '\nBy Popular Vote' ),
+      election$Votes,
+      election$Votes.1,
+      main = paste( title, '\nby popular vote in millions' ),
       xlab = paste( names(candidates)[1], candidates[[1]], sep = ' - ' ),
-      ylab = paste( names(candidates)[2], candidates[[2]], sep = ' - ' )
+      ylab = paste( names(candidates)[2], candidates[[2]], sep = ' - ' ),
+      xaxt = 'n', # Turn off default axis
+      yaxt = 'n', # "
+    );
+
+    # Scale the values.
+    scale <- 1000000;
+
+    # Draw the axes.
+    axis( 1,
+        at     = c(0, max(election$Votes)),
+        labels = c(0, sprintf('%.2f', (max(election$Votes) / scale))),
+    );
+    axis( 2,
+        at     = c(0, max(election$Votes.1)),
+        labels = c(0, sprintf('%.2f', max(election$Votes.1) / scale)),
+        las    = 1, # Horizontally orient labels
     );
 
     # Draw a slope=1 line as reference.
