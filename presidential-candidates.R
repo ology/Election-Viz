@@ -63,13 +63,21 @@ for (file in filenames) {
 
     # Draw the axes.
     axis( 1,
-        at     = c(0, max(election$Votes)),
-        labels = c(0, sprintf('%.2f', (max(election$Votes) / scale))),
+        at     = c(0, max(election$Votes) / 2, max(election$Votes)),
+        labels = c(
+            0,
+            sprintf('%.2f', max(election$Votes) / scale / 2),
+            sprintf('%.2f', max(election$Votes) / scale)
+        ),
     );
     axis( 2,
-        at     = c(0, max(election$Votes.1)),
-        labels = c(0, sprintf('%.2f', max(election$Votes.1) / scale)),
-        las    = 1, # Horizontally orient labels
+        at     = c(0, max(election$Votes.1) / 2, max(election$Votes.1)),
+        labels = c(
+            0,
+            sprintf('%.2f', max(election$Votes.1) / scale / 2),
+            sprintf('%.2f', max(election$Votes.1) / scale)
+        ),
+#        las    = 1, # Horizontally orient labels
     );
 
     # Draw a slope=1 line as reference.
