@@ -1,0 +1,65 @@
+#!/usr/bin/perl
+
+=head1 PROGRAM
+
+Convert the wikipedia C<wikitable> for presidential election results, by state,
+into a columnar data file.
+
+=head2 VERSION
+
+0.01
+
+=head2 AUTHOR
+
+Gene Boggs C<gene plus github at ology dot net>
+
+=head2 HISTORY
+
+0.01 - Raw crude wildcatting.
+
+=head2 TO DO
+
+Investigate L<MediaWiki::DumpFile>
+
+=cut
+
+use strict;
+use warnings;
+
+use WWW::Wikipedia;
+
+my $year  = shift || 2012;
+my $title = 'United_States_presidential_election,_' . $year;
+
+my $w = WWW::Wikipedia->new;
+my $entry = $w->search($title);
+
+my ($text, $seen) = ('Results by state', 0);
+
+my @lines = split /\n/, $entry->fulltext;
+for my $line (@lines) {
+    # Skip unless we find the right line.
+    $seen++ if $line =~ /$text/;
+    next unless $seen;
+
+    # Remove style element.
+    $line =~ s/style="text-//g;
+    $line =~ s/align:center;"//g;
+    # Trim line headers.
+    $line =~ s/^[|!]\s+//g;
+    # Join cells into a single line.
+    $line =~ s/... WAIT.  I am doing this wrong.
+
+#    print "$line\n"; # TESTING
+
+    # Split the line into table cells.
+    my @parts = split / \|\| /, $line;
+
+    # Traverse the cells.
+    for my $p (@parts) {
+        print "$p\n"; # TESTING
+    }
+
+    # Stop if we've reached the end of the table.
+    last if $line =~ /^\s*$/;
+}
