@@ -7,14 +7,14 @@
 # split.  A point between the diagonal reference line and the axis of a
 # candidate, represents that State "leaning" toward that candidate.
 #
-# -- gene+github at ology dot net not com
+# -- gene+github@ology.net
 #
 
 # Collect the election data files.
 filenames <- list.files(
     'data',
-    pattern = '^presidential-[0-9]{4}.txt$',
-    full.names = TRUE
+    pattern = '^[0-9]{4}.txt$',
+    full.names = TRUE,
 );
 
 # Process the elections into charts.
@@ -24,19 +24,21 @@ for (file in filenames) {
         file,
         header = TRUE,
         nrows  = 1,
+        sep    = '\t',
     );
     # Convert "periods before letters" back to spaces, in candidate names.
     names(candidates) <- gsub('[.]([A-Z])', ' \\1', names(candidates));
 
     # Build the chart title from the filename.
-    title <- paste( gsub('^[a-z/]+-([0-9]+)\\.txt$', '\\1', file), 'US Presidential Election' );
+    title <- paste( gsub('^([0-9]+)\\.txt$', '\\1', file), 'US Presidential Election' );
 
     # Read the election data.
     election <- read.table(
         file,
         header     = TRUE,
         skip       = 2,
-        na.strings = '-'
+        na.strings = '-',
+        sep        = '\t',
     );
 
     # Convert the winner numbers into integers.
@@ -62,6 +64,7 @@ for (file in filenames) {
     scale <- 1000000;
 
     # Draw the axes.
+    # XXX Clunky and tedious. TODO Apply a single scaling method.
     axis( 1,
         at     = c(0, max(election$Votes) / 2, max(election$Votes)),
         labels = c(
@@ -77,10 +80,9 @@ for (file in filenames) {
             sprintf('%.2f', max(election$Votes.1) / scale / 2),
             sprintf('%.2f', max(election$Votes.1) / scale)
         ),
-#        las    = 1, # Horizontally orient labels
     );
 
-    # Draw a slope=1 line as reference.
+    # Draw a slope=1 reference line.
     abline(
       a   = 0,
       b   = 1,
