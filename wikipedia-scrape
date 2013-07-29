@@ -82,6 +82,9 @@ if ( $text =~ /^.+?(\w+.+?)Margin.+?\|\s*(State  .+?)(Alabama.+)\s*}$/ ) {
             my $name = shift @$row;
             $row->[0] = "$name $row->[0]";
         }
+
+        # Eliminate empty entries.
+        @$row = grep { $_ ne '' } @$row;
     }
 
     # Output the table.
