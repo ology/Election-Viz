@@ -5,18 +5,9 @@
 Convert the wikipedia C<wikitable> for presidential election results, by state,
 into a columnar data file.
 
-=head2 VERSION
-
-0.01
-
 =head2 AUTHOR
 
 Gene Boggs C<gene plus github at ology dot net>
-
-=head2 HISTORY
-
-0.02 - Parse the page as a string, not lines.
-0.01 - Raw crude wildcatting.
 
 =head2 TO DO
 
