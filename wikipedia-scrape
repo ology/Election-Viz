@@ -75,8 +75,9 @@ if ( $text =~ /^.+?(\w+.+?)Margin.+?\|\s*(State  .+?)(Alabama.+)\s*}$/ ) {
     # Split the rows into cells of individual data.
     @data = map { [ split(/ /, $_) ] } @data;
 
-    # Fix 2-name states.
+    # Sanitize the data one last time.
     for my $row (@data) {
+        # Fix 2-name states.
         if ( $row->[0] =~ /^\w+$/ && $row->[1] =~ /^\w+$/ ) {
             my $name = shift @$row;
             $row->[0] = "$name $row->[0]";
