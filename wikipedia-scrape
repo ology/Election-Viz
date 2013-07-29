@@ -15,6 +15,7 @@ Gene Boggs C<gene plus github at ology dot net>
 
 =head2 HISTORY
 
+0.02 - Parse the page as a string, not lines.
 0.01 - Raw crude wildcatting.
 
 =head2 TO DO
@@ -31,35 +32,23 @@ use WWW::Wikipedia;
 my $year  = shift || 2012;
 my $title = 'United_States_presidential_election,_' . $year;
 
-my $w = WWW::Wikipedia->new;
-my $entry = $w->search($title);
+my $wiki  = WWW::Wikipedia->new;
+my $entry = $wiki->search($title);
 
-my ($text, $seen) = ('Results by state', 0);
+# Isolate the election results table.
+my $match = qr/.*?(Results by state.+?)\n$/ms;
+(my $text = $entry->fulltext) =~ s/\A$match.*?\Z/$1/ms;
 
-my @lines = split /\n/, $entry->fulltext;
-for my $line (@lines) {
-    # Skip unless we find the right line.
-    $seen++ if $line =~ /$text/;
-    next unless $seen;
+# Remove newlines.
+$text =~ s/\n//g;
+# Remove bits.
+$text =~ s/class="wikitable(?: sortable)?"//g;
+$text =~ s/Results by state <ref><\/ref> {\|//g;
+$text =~ s/States won by \w+\/\w+//g;
+$text =~ s/colspan=\d+//g;
+$text =~ s/align[=:]center;?//g;
+$text =~ s/ font-size:!? \d+%//g;
+$text =~ s/data-sort-//g;
+$text =~ s/\w+="[\w :-]+\|?!?\s*?;?"//msg;
 
-    # Remove style element.
-    $line =~ s/style="text-//g;
-    $line =~ s/align:center;"//g;
-    # Trim line headers.
-    $line =~ s/^[|!]\s+//g;
-    # Join cells into a single line.
-    $line =~ s/... WAIT.  I am doing this wrong.
-
-#    print "$line\n"; # TESTING
-
-    # Split the line into table cells.
-    my @parts = split / \|\| /, $line;
-
-    # Traverse the cells.
-    for my $p (@parts) {
-        print "$p\n"; # TESTING
-    }
-
-    # Stop if we've reached the end of the table.
-    last if $line =~ /^\s*$/;
-}
+print $text;
