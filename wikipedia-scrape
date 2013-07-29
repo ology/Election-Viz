@@ -83,5 +83,10 @@ if ( $text =~ /^.+?(\w+.+?)Margin.+?\|\s*(State  .+?)(Alabama.+)\s*}$/ ) {
             $row->[0] = "$name $row->[0]";
         }
     }
+
+    # Output the table.
+    print join("\t", @candidates), "\n";
+    print join("\t", @headers), "\n";
+    print join("\n", map { join "\t", @$_ } @data);
 }
 
