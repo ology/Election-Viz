@@ -41,7 +41,7 @@ my $match = qr/.*?(Results by state.+?)\n$/ms;
 
 # Remove newlines.
 $text =~ s/\n//g;
-# Remove bits.
+# Remove insane wikipedia markup bits.
 $text =~ s/class="wikitable(?: sortable)?"//g;
 $text =~ s/Results by state <ref><\/ref> {\|//g;
 $text =~ s/States won by \w+\/\w+//g;
@@ -51,4 +51,19 @@ $text =~ s/ font-size:!? \d+%//g;
 $text =~ s/data-sort-//g;
 $text =~ s/\w+="[\w :-]+\|?!?\s*?;?"//msg;
 
-print $text;
+# Ameliorate wikipedia franken-markup artifacts.
+$text =~ s/!//g;
+$text =~ s/<br>/ /g;
+
+# Tease-out the table parts.
+if ( $text =~ /^.+?(\w+.+?)Margin.+?\|\s*(State  .+?)(Alabama.+)\s*}$/ ) {
+    # Extract the important bits.
+    my $candidates = $1;
+    my $headers    = $2;
+    my $data       = $3;
+
+    # Extract the candidates.
+    my @candidates = split /\s*\|\s*/, $candidates;
+    # Extract the table headers.
+    my @headers = split /\s*\|\s*/, $headers;
+}
