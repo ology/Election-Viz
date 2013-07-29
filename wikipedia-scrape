@@ -39,6 +39,7 @@ my $entry = $wiki->search($title);
 my $match = qr/.*?(Results by state.+?)\n$/ms;
 (my $text = $entry->fulltext) =~ s/\A$match.*?\Z/$1/ms;
 
+# Ameliorate wikipedia franken-markup artifacts:
 # Remove newlines.
 $text =~ s/\n//g;
 # Remove insane wikipedia markup bits.
@@ -49,21 +50,37 @@ $text =~ s/colspan=\d+//g;
 $text =~ s/align[=:]center;?//g;
 $text =~ s/ font-size:!? \d+%//g;
 $text =~ s/data-sort-//g;
+# Match a generic element attribute.
 $text =~ s/\w+="[\w :-]+\|?!?\s*?;?"//msg;
-
-# Ameliorate wikipedia franken-markup artifacts.
+# Handle hybrid newlines.
 $text =~ s/!//g;
 $text =~ s/<br>/ /g;
 
-# Tease-out the table parts.
+# Extract the table parts.
 if ( $text =~ /^.+?(\w+.+?)Margin.+?\|\s*(State  .+?)(Alabama.+)\s*}$/ ) {
-    # Extract the important bits.
-    my $candidates = $1;
-    my $headers    = $2;
-    my $data       = $3;
+    my ($candidates, $headers, $data) = ($1, $2, $3);
 
     # Extract the candidates.
     my @candidates = split /\s*\|\s*/, $candidates;
+
     # Extract the table headers.
     my @headers = split /\s*\|\s*/, $headers;
+
+    # Eliminate spurious | characters.
+    $data =~ s/\|//g;
+
+    # Extract the data rows.
+    my @data = $data =~ /([A-Z]\w{3,}(?: \w+)?.+?[A-Z]{2} -?)/g;
+
+    # Split the rows into cells of individual data.
+    @data = map { [ split(/ /, $_) ] } @data;
+
+    # Fix 2-name states.
+    for my $row (@data) {
+        if ( $row->[0] =~ /^\w+$/ && $row->[1] =~ /^\w+$/ ) {
+            my $name = shift @$row;
+            $row->[0] = "$name $row->[0]";
+        }
+    }
 }
+
