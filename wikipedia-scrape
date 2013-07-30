@@ -27,7 +27,7 @@ my $year = shift || 2012;
 my $text = '';
 
 # Possible cached raw data file.
-my $filename = printf 'data/raw-%d.txt', $year;
+my $filename = sprintf 'data/raw-%d.txt', $year;
 
 # Cache or harvest?
 if (-e $filename) {
