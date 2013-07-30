@@ -20,9 +20,12 @@ use warnings;
 
 use WWW::Wikipedia;
 
+# Get the year from the commandline.
 my $year  = shift || 2012;
+# Construct the entry title.
 my $title = 'United_States_presidential_election,_' . $year;
 
+# Harvest from wikipedia.
 my $wiki  = WWW::Wikipedia->new;
 my $entry = $wiki->search($title);
 
