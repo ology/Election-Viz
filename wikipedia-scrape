@@ -51,7 +51,7 @@ else {
 
 # Isolate the election results table.
 my $match = qr/.*?(Results\s+by\s+state.+?)\n$/ms;
-($text = $entry->fulltext) =~ s/\A$match.*?\Z/$1/ms;
+$text =~ s/\A$match.*?\Z/$1/ms;
 
 # Ameliorate wikipedia franken-markup artifacts:
 # Replace newlines with spaces.
