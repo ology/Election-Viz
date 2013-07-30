@@ -55,7 +55,7 @@ $text =~ s/\A$match.*?\Z/$1/ms;
 
 # Ameliorate wikipedia franken-markup artifacts:
 # Replace newlines with spaces.
-$text =~ s/\n//g;
+$text =~ s/\n/ /g;
 # Remove wikipedia markup bits.
 $text =~ s/class="wikitable(?: sortable)?"//g;
 $text =~ s/Results by state <ref><\/ref>//g;
