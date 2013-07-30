@@ -22,16 +22,36 @@ use WWW::Wikipedia;
 
 # Get the year from the commandline.
 my $year  = shift || 2012;
-# Construct the entry title.
-my $title = 'United_States_presidential_election,_' . $year;
 
-# Harvest from wikipedia.
-my $wiki  = WWW::Wikipedia->new;
-my $entry = $wiki->search($title);
+# String to hold the harvest or read results.
+my $text = '';
+
+# Possible cached raw data file.
+my $filename = "data/$year.txt";
+
+# Cache or harvest?
+if (-e $filename) {
+    warn "Cached data exists in $filename\n";
+    # Read the cashed wikipedia text.
+    local $/;
+    open my $input, '<', $filename or die "Can't read $filename: $!";
+    $text = <$input>;
+}
+else {
+    # Construct the entry title.
+    my $title = 'United_States_presidential_election,_' . $year;
+    warn "Harvesting new data from entry: '$title'\n";
+    # Harvest from wikipedia.
+    my $wiki  = WWW::Wikipedia->new;
+    my $entry = $wiki->search($title);
+    open my $output, '>', $filename or die "Can't write to $filename: $!";
+    $text = $entry->fulltext;
+    print $output $text;
+}
 
 # Isolate the election results table.
 my $match = qr/.*?(Results by state.+?)\n$/ms;
-(my $text = $entry->fulltext) =~ s/\A$match.*?\Z/$1/ms;
+($text = $entry->fulltext) =~ s/\A$match.*?\Z/$1/ms;
 
 # Ameliorate wikipedia franken-markup artifacts:
 # Remove newlines.
