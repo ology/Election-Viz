@@ -54,9 +54,9 @@ my $match = qr/.*?(Results by state.+?)\n$/ms;
 ($text = $entry->fulltext) =~ s/\A$match.*?\Z/$1/ms;
 
 # Ameliorate wikipedia franken-markup artifacts:
-# Remove newlines.
+# Replace newlines with spaces.
 $text =~ s/\n//g;
-# Remove insane wikipedia markup bits.
+# Remove wikipedia markup bits.
 $text =~ s/class="wikitable(?: sortable)?"//g;
 $text =~ s/Results by state <ref><\/ref> {\|//g;
 $text =~ s/States won by \w+\/\w+//g;
@@ -64,7 +64,7 @@ $text =~ s/colspan=\d+//g;
 $text =~ s/align[=:]center;?//g;
 $text =~ s/ font-size:!? \d+%//g;
 $text =~ s/data-sort-//g;
-# Match a generic element attribute.
+# Match generic element attributes.
 $text =~ s/\w+="[\w :-]+\|?!?\s*?;?"//msg;
 # Handle hybrid newlines.
 $text =~ s/!//g;
