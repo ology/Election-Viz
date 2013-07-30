@@ -58,14 +58,13 @@ $text =~ s/\A$match.*?\Z/$1/ms;
 $text =~ s/\n//g;
 # Remove wikipedia markup bits.
 $text =~ s/class="wikitable(?: sortable)?"//g;
-$text =~ s/Results by state <ref><\/ref> {\|//g;
+$text =~ s/Results by state <ref><\/ref>//g;
 $text =~ s/States won by \w+\/\w+//g;
 $text =~ s/colspan=\d+//g;
 $text =~ s/align[=:]center;?//g;
-$text =~ s/ font-size:!? \d+%//g;
 $text =~ s/data-sort-//g;
 # Match generic element attributes.
-$text =~ s/\w+="[\w :-]+\|?!?\s*?;?"//msg;
+$text =~ s/\w+="[^"]+"//g;
 # Handle hybrid newlines.
 $text =~ s/!//g;
 $text =~ s/<br>/ /g;
