@@ -101,8 +101,8 @@ if ( $text =~ /^.+?(\w+.+?)Margin.+?(State\s*\|\s+.+?)(Alabama.+?)}\s*$/ ) {
     }
 
     # Output the table.
-    print join("\t", @candidates), "\n";
-    print join("\t", @headers), "\n";
-    print join("\n", map { join "\t", @$_ } @data);
+    print join("\|", @candidates), "\n";
+    print join("\|", @headers), "\n";
+    print join("\n", map { join "\|", @$_ } @data);
 }
 
