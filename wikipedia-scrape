@@ -21,7 +21,7 @@ use warnings;
 use WWW::Wikipedia;
 
 # Get the year from the commandline.
-my $year  = shift || 2012;
+my $year = shift || 2012;
 
 # String to hold the harvest or read results.
 my $text = '';
