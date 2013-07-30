@@ -70,7 +70,7 @@ $text =~ s/!//g;
 $text =~ s/<br>/ /g;
 
 # Extract the table parts.
-if ( $text =~ /^.+?(\w+.+?)Margin.+?\|\s*(State  .+?)(Alabama.+)\s*}$/ ) {
+if ( $text =~ /^.+?(\w+.+?)Margin.+?(State\s*\|\s+.+?)(Alabama.+?)}\s*$/ ) {
     my ($candidates, $headers, $data) = ($1, $2, $3);
 
     # Extract the candidates.
