@@ -53,7 +53,7 @@ else {
 }
 
 # Isolate the election results table.
-my $match = qr/.*?(Results\s+by\s+state.+?)\n$/ms;
+my $match = qr/.*?((?:Results|Votes)\s+by\s+state.+?)\n$/ms;
 $text =~ s/\A$match.*?\Z/$1/ms;
 
 # Ameliorate wikipedia franken-markup artifacts:
