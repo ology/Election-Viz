@@ -23,11 +23,11 @@ use WWW::Wikipedia;
 # Get the year from the commandline.
 my $year = shift || 2012;
 
-# String to hold the harvest or read results.
-my $text = '';
-
 # Cached raw data file.
 my $filename = sprintf 'data/raw-%d.txt', $year;
+
+# String to hold the harvest or read results.
+my $text = '';
 
 # Cache or harvest?
 if (-e $filename) {
