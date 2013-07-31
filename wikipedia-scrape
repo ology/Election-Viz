@@ -26,7 +26,7 @@ my $year = shift || 2012;
 # String to hold the harvest or read results.
 my $text = '';
 
-# Possible cached raw data file.
+# Cached raw data file.
 my $filename = sprintf 'data/raw-%d.txt', $year;
 
 # Cache or harvest?
@@ -35,6 +35,7 @@ if (-e $filename) {
     # Read the cashed wikipedia text.
     local $/;
     open my $input, '<', $filename or die "Can't read $filename: $!";
+    # Set the text for matching.
     $text = <$input>;
 }
 else {
@@ -44,7 +45,9 @@ else {
     # Harvest from wikipedia.
     my $wiki  = WWW::Wikipedia->new;
     my $entry = $wiki->search($title);
+    # Cache the raw entry.
     open my $output, '>', $filename or die "Can't write to $filename: $!";
+    # Set the text for matching.
     $text = $entry->fulltext;
     print $output $text;
 }
