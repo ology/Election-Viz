@@ -44,7 +44,7 @@ else {
     warn "Harvesting new data from entry: '$title'\n";
     # Harvest from wikipedia.
     my $wiki  = WWW::Wikipedia->new;
-    my $entry = $wiki->search($title);
+    my $entry = $wiki->search($title) or die "ERROR: No such entry\n";
     # Cache the raw entry.
     open my $output, '>', $filename or die "Can't write to $filename: $!";
     # Set the text for matching.
