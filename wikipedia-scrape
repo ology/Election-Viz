@@ -47,14 +47,62 @@ else {
     my $entry = $wiki->search($title) or die "ERROR: No such entry\n";
     # Cache the raw entry.
     open my $output, '>', $filename or die "Can't write to $filename: $!";
+    print $output $entry->fulltext;
     # Set the text for matching.
     $text = $entry->fulltext;
-    print $output $text;
 }
 
 # Isolate the election results table.
-my $match = qr/.*?((?:Results|Votes)\s+by\s+state.+?)\n$/ms;
-$text =~ s/\A$match.*?\Z/$1/ms;
+if ( $text =~ /
+    \A
+    .*?
+    (?:Results|Votes)\s+by\s+state
+    \s*
+    (.+?)
+    (?:U\.S\.?\s*Total|TOTALS:?)
+    .+?
+    \Z
+    /msix
+) {
+    $text = $1;
+    # Match all years except 2000.
+    if ( $text =~ /
+        \A
+        .+?
+        \{ \s* \| # wikitable start
+        .+?
+        \| \s* \} # wikitable end
+        (.+?)
+        \Z
+        /msx
+    ) {
+#        die "1 Matched!\n";
+        $text = $1;
+        die "1 Matched:\n$text\n";
+    }
+    else {
+        # Match year 2000.
+        if ( $text =~ /
+            \A
+            .+?
+            \{ \s* \| # wikitable start
+            (.+?)
+            \Z
+            /msx
+        ) {
+#            die "2 Matched!\n";
+            $text = $1;
+            die "2 Matched:\n$text\n";
+        }
+        else {
+            die "2 Can't match table\n";
+        }
+    }
+}
+else {
+    die "1 Can't match text\n";
+}
+__END__
 
 # Replace newlines with spaces.
 $text =~ s/\n/ /g;
