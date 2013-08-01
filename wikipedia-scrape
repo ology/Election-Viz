@@ -103,6 +103,7 @@ else {
     die "1 Can't match text\n";
 }
 
+# Ameliorate wikipedia franken-markup.
 $text =~ s/[\w-]+[=:]"?[\w :-]+[%;]?"?//g; # Remove attribute settings.
 $text =~ s/[[:^ascii:]]//g; # Purge any non-ascii chars.
 $text =~ s/&nbsp;//g; # Remove literal spaces.
@@ -111,13 +112,14 @@ $text =~ s/^!\s*//msg; # Handle !wikilines.
 $text =~ s/<br>/ /g; # Handle html linebreaks.
 $text =~ s/<.+?>//msg; # Remove all <elements>.
 $text =~ s/-\s*\n\s*\|\s*//g; # Eliminate wikinewlines.
-$text =~ s/\s*\|\|\s*/\|/g; # Replace double |s with a single |.
+$text =~ s/\s*\|\|\s*/\|/g; # Replace double |s with singles.
 # Handle entries before y2k.
 if ( $year < 2000 ) {
-    $text =~ s/="?\w+"?//g; # Remove stray attribute artifacts.
-    $text =~ s/\d+%"//g; # Remove stray attribute artifact.
-    $text =~ s/data-sort-//g; # Remove stray attribute artifact.
-    $text =~ s/font-size://g; # Remove stray attribute artifact.
+    # Remove stray attribute artifacts.
+    $text =~ s/="?\w+"?//g;
+    $text =~ s/\d+%"//g;
+    $text =~ s/data-sort-//g;
+    $text =~ s/font-size://g;
 }
 die "v:\n$text\n";
 __END__
