@@ -78,7 +78,7 @@ if ( $text =~ /
     ) {
 #        die "1 Matched!\n";
         $text = $1;
-        die "1 Matched:\n$text\n";
+#        die "1 Matched:\n$text\n";
     }
     else {
         # Match year 2000.
@@ -92,7 +92,7 @@ if ( $text =~ /
         ) {
 #            die "2 Matched!\n";
             $text = $1;
-            die "2 Matched:\n$text\n";
+#            die "2 Matched:\n$text\n";
         }
         else {
             die "2 Can't match table\n";
@@ -102,8 +102,28 @@ if ( $text =~ /
 else {
     die "1 Can't match text\n";
 }
+
+$text =~ s/[\w-]+[=:]"?[\w :-]+[%;]?"?//g; # Remove attribute settings.
+$text =~ s/[[:^ascii:]]//g; # Purge any non-ascii chars.
+$text =~ s/&nbsp;//g; # Remove literal spaces.
+$text =~ s/!+/!/g; # Handle hybrid newlines.
+$text =~ s/^!\s*//msg; # Handle !wikilines.
+$text =~ s/<br>/ /g; # Handle html linebreaks.
+$text =~ s/<.+?>//msg; # Remove all <elements>.
+$text =~ s/-\s*\n\s*\|\s*//g; # Eliminate wikinewlines.
+$text =~ s/\s*\|\|\s*/\|/g; # Replace double |s with a single |.
+# Handle entries before y2k.
+if ( $year < 2000 ) {
+    $text =~ s/="?\w+"?//g; # Remove stray attribute artifacts.
+    $text =~ s/\d+%"//g; # Remove stray attribute artifact.
+    $text =~ s/data-sort-//g; # Remove stray attribute artifact.
+    $text =~ s/font-size://g; # Remove stray attribute artifact.
+}
+die "v:\n$text\n";
 __END__
 
+#    $text =~ s/\s*\n\s*//g; # Remove newlines.
+#    $text =~ s/!//g; # Remove !s
 # Replace newlines with spaces.
 $text =~ s/\n/ /g;
 # Remove wikipedia markup bits.
@@ -115,9 +135,6 @@ $text =~ s/align[=:]center;?//g;
 $text =~ s/data-sort-//g;
 # Match generic element attributes.
 $text =~ s/\w+="[^"]+"//g;
-# Handle hybrid newlines.
-$text =~ s/!//g;
-$text =~ s/<br>/ /g;
 
 # Extract the table parts.
 if ( $text =~ /^.+?(\w+.+?)Margin.+?(State\s*\|\s+.+?)(Alabama.+?)}\s*$/ ) {
