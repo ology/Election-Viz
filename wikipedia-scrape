@@ -56,10 +56,10 @@ else {
 if ( $text =~ /
     \A
     .*?
-    (?:Results|Votes)\s+by\s+state
+    (?:Results|Votes)\s+by\s+state  # Election results table marker
     \s*
-    (.+?)
-    (?:U\.S\.?\s*Total|TOTALS:?)
+    (.+?)                           # Election results table data
+    (?:U\.S\.?\s*Total|TOTALS:?)    # End of data table
     .+?
     \Z
     /msix
@@ -69,10 +69,10 @@ if ( $text =~ /
     if ( $text =~ /
         \A
         .+?
-        \{ \s* \| # wikitable start
+        \{ \s* \|   # wikitable start
         .+?
-        \| \s* \} # wikitable end
-        (.+?)
+        \| \s* \}   # wikitable end
+        (.+?)       # Actual, useful data
         \Z
         /msx
     ) {
@@ -85,8 +85,8 @@ if ( $text =~ /
         if ( $text =~ /
             \A
             .+?
-            \{ \s* \| # wikitable start
-            (.+?)
+            \{ \s* \|   # wikitable start
+            (.+?)       # Actual, useful data
             \Z
             /msx
         ) {
