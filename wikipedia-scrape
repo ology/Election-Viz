@@ -104,74 +104,105 @@ else {
 }
 
 # Ameliorate wikipedia franken-markup.
+$text =~ s/\{*//msg;
 $text =~ s/[\w-]+[=:]"?[\w :-]+[%;]?"?//g; # Remove attribute settings.
 $text =~ s/[[:^ascii:]]//g; # Purge any non-ascii chars.
 $text =~ s/&nbsp;//g; # Remove literal spaces.
-$text =~ s/!+/!/g; # Handle hybrid newlines.
-$text =~ s/^!\s*//msg; # Handle !wikilines.
+$text =~ s/^!\s*//msg; # Remove wikinewline artifact.
 $text =~ s/<br>/ /g; # Handle html linebreaks.
 $text =~ s/<.+?>//msg; # Remove all <elements>.
-$text =~ s/-\s*\n\s*\|\s*//g; # Eliminate wikinewlines.
-$text =~ s/\s*\|\|\s*/\|/g; # Replace double |s with singles.
+$text =~ s/<(\w+).+?><\/\1>//msg; # Remove all <elements>.
+$text =~ s/-\n\|//g; # Eliminate wikinewlines.
+#$text =~ s/-\s*\n\s*\|\s*//g; # Eliminate wikinewlines.
+$text =~ s/!+/!/g; # Replace double !s with singles.
+$text =~ s/\s*\|\s*\|\s*/\|/msg; # Replace double |s with singles.
+$text =~ s/\n\|ColumbiaDistrict of//; # Remove 2012 edge case artifact.
 # Handle entries before y2k.
 if ( $year < 2000 ) {
     # Remove stray attribute artifacts.
     $text =~ s/="?\w+"?//g;
     $text =~ s/\d+%"//g;
-    $text =~ s/data-sort-//g;
+    $text =~ s/data-sort-?//g;
     $text =~ s/font-size://g;
 }
-die "v:\n$text\n";
-__END__
 
-#    $text =~ s/\s*\n\s*//g; # Remove newlines.
-#    $text =~ s/!//g; # Remove !s
-# Replace newlines with spaces.
-$text =~ s/\n/ /g;
-# Remove wikipedia markup bits.
-$text =~ s/class="wikitable(?: sortable)?"//g;
-$text =~ s/Results by state <ref><\/ref>//g;
-$text =~ s/States won by \w+\/\w+//g;
-$text =~ s/colspan=\d+//g;
-$text =~ s/align[=:]center;?//g;
-$text =~ s/data-sort-//g;
-# Match generic element attributes.
-$text =~ s/\w+="[^"]+"//g;
+# Declare the table parts.
+my ($candidates, $headers, $data);
 
 # Extract the table parts.
-if ( $text =~ /^.+?(\w+.+?)Margin.+?(State\s*\|\s+.+?)(Alabama.+?)}\s*$/ ) {
-    my ($candidates, $headers, $data) = ($1, $2, $3);
+if ( $year < 2000 && $text =~ /\A(.+?)Margin.+?(State.+?)(Alabama.+?)\Z/ms ) {
+    # Process parts for 1900 - 1996.
+    ($candidates, $headers, $data) = ($1, $2, $3);
+    $headers =~ s/\s*\|\s*\Z//g; # Trim trailing |s.
+}
+elsif ( $year >= 2000 && $year < 2012 && $text =~ /\A(.+?)(Alabama.+?)\Z/ms )  {
+    # Process parts for 2000 - 2008.
+    ($headers, $data) = ($1, $2);
+    # Handle franken-markup. Order matters.
+    $headers =~ s/\|-\s*//g; # Remove superflous bits.
+    $headers =~ s/!/\|/g; # !s become |s.
+    $headers =~ s/-\n//g; # Un-hyphenate cells.
+    $headers =~ s/\A\s*\|\s*//g; # Trim leading |s.
+    $headers =~ s/\n/\|/g; # Add trailing |s.
+    $headers =~ s/\|\|/\|/g; # Double ||s become single.
+    $headers =~ s/\s*\|\s*\Z//g; # Trim trailing |s.
 
-    # Extract the candidates.
-    my @candidates = split /\s*\|\s*/, $candidates;
+    # Extract the candidates from the headers!
+    $candidates = $headers;
+    $candidates =~ s/State|Electors|Margin|Total//g; # Remove non-candidate entries.
+    $candidates =~ s/\s*%\s*//g; # Remove non-candidate entries.
+    $candidates =~ s/\|\|/\|/g; # Double ||s become single.
+    $candidates =~ s/\A\s*\|\s*\|?\s*//; # Trim leading |s.
+    $candidates =~ s/\s*\|?\s*\|\s*\Z//; # Trim trailing |s.
+}
+elsif ( $year >= 2012 && $text =~ /\A(.+?)Margin.+?(State.+?)(Alabama.+?)\Z/ms )  {
+    # Process parts for 2012.
+    ($candidates, $headers, $data) = ($1, $2, $3);
+}
+else {
+    # Fall-through.
+    die "Unsure how to proceed with the given input.\n";
+}
 
-    # Extract the table headers.
-    my @headers = split /\s*\|\s*/, $headers;
+print
+#"\n\n",
+#"* Candidates:\n\n",
+#$candidates,
+#"\n\n",
+"* Headers:\n\n",
+$headers,
+;
+__END__
 
-    # Eliminate spurious | characters.
-    $data =~ s/\|//g;
+# Extract the candidates unless they are alread defined.
+my @candidates = split /\s*\|\s*/ms, $candidates;
 
-    # Extract the data rows.
-    my @data = $data =~ /([A-Z]\w{3,}(?: \w+)?.+?[A-Z]{2} -?)/g;
+# Extract the header row.
+my @headers = split /\s*\|\s*/, $headers;
 
-    # Split the rows into cells of individual data.
-    @data = map { [ split(/ /, $_) ] } @data;
+# Replace spurious |s with spaces.
+$data =~ s/\|/ /msg;
 
-    # Sanitize the data one last time.
-    for my $row (@data) {
-        # Fix 2-name states.
-        if ( $row->[0] =~ /^\w+$/ && $row->[1] =~ /^\w+$/ ) {
-            my $name = shift @$row;
-            $row->[0] = "$name $row->[0]";
-        }
+# Extract the data rows.
+my @data = $data =~ /([A-Z]\w{3,}(?: \w+)?.+?[A-Z]{2} -?)/msg;
 
-        # Eliminate empty entries.
-        @$row = grep { $_ ne '' } @$row;
+# Split the rows into cells of individual data.
+@data = map { [ split(/ /, $_) ] } @data;
+
+# Sanitize the data one last time.
+for my $row (@data) {
+    # Fix 2-name states.
+    if ( $row->[0] =~ /^\w+$/ && $row->[1] =~ /^\w+$/ ) {
+        my $name = shift @$row;
+        $row->[0] = "$name $row->[0]";
     }
 
-    # Output the table.
-    print join("\|", @candidates), "\n";
-    print join("\|", @headers), "\n";
-    print join("\n", map { join "\|", @$_ } @data);
+    # Eliminate empty entries.
+    @$row = grep { $_ ne '' } @$row;
 }
+
+# Output the table.
+print join("\|", @candidates), "\n";
+print join("\|", @headers), "\n";
+print join("\n", map { join "\|", @$_ } @data);
 
