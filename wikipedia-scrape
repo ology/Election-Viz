@@ -113,7 +113,6 @@ $text =~ s/<br>/ /g; # Handle html linebreaks.
 $text =~ s/<.+?>//msg; # Remove all <elements>.
 $text =~ s/<(\w+).+?><\/\1>//msg; # Remove all <elements>.
 $text =~ s/-\n\|//g; # Eliminate wikinewlines.
-#$text =~ s/-\s*\n\s*\|\s*//g; # Eliminate wikinewlines.
 $text =~ s/!+/!/g; # Replace double !s with singles.
 $text =~ s/\s*\|\s*\|\s*/\|/msg; # Replace double |s with singles.
 $text =~ s/\n\|ColumbiaDistrict of//; # Remove 2012 edge case artifact.
@@ -165,12 +164,9 @@ else {
 }
 
 print
-#"\n\n",
-#"* Candidates:\n\n",
-#$candidates,
-#"\n\n",
-"* Headers:\n\n",
-$headers,
+"* Candidates:\n\n", $candidates,
+"\n\n",
+"* Headers:\n\n", $headers,
 ;
 __END__
 
