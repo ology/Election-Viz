@@ -28,30 +28,7 @@ my $year = shift || 2012;
 my $filename = sprintf 'data/html-%d.txt', $year;
 
 # String to hold the harvest or read results.
-my $html = '';
-
-# Cache or harvest?
-if (-e $filename) {
-    warn "Cached data exists in $filename\n";
-    # Read the cashed wikipedia text.
-    local $/;
-    open my $input, '<', $filename or die "Can't read $filename: $!";
-    # Set the text for matching.
-    $html = <$input>;
-}
-else {
-    # Harvest from wikipedia.
-    my $url = 'https://en.wikipedia.org/wiki/';
-    $url .= 'United_States_presidential_election,_' . $year;
-    warn "Harvesting new data from entry: '$url'\n";
-    my $agent = LWP::UserAgent->new;
-    my $response = $agent->get($url);
-
-    # Cache the raw entry.
-    $html = $response->content;
-    open my $output, '>', $filename or die "Can't write to $filename: $!";
-    print $output $html;
-}
+my $html = cached($year, $filename);
 
 # Parse an entry with a TableExtract object.
 my $tx = HTML::TableExtract->new;
@@ -74,4 +51,30 @@ for my $tab ($tx->tables) {
         }
         redo if $found;
     }
+}
+
+sub cached { # Cache or harvest a wikipedia entry.
+    my ($year, $filename) = @_;
+
+    if (-e $filename) {
+        warn "Cached data exists in $filename\n";
+        # Read the cashed wikipedia text.
+        local $/;
+        open my $input, '<', $filename or die "Can't read $filename: $!";
+        # Set the text for matching.
+        $html = <$input>;
+    }
+    else {
+        # Harvest from wikipedia.
+        my $url = 'https://en.wikipedia.org/wiki/';
+        $url .= 'United_States_presidential_election,_' . $year;
+        warn "Harvesting new data from entry: '$url'\n";
+        my $agent = LWP::UserAgent->new;
+        my $response = $agent->get($url);
+        # Cache the raw entry.
+        $html = $response->content;
+        open my $output, '>', $filename or die "Can't write to $filename: $!";
+        print $output $html;
+    }
+    return $html;
 }
