@@ -18,6 +18,7 @@ Investigate L<MediaWiki::DumpFile>
 use strict;
 use warnings;
 
+use HTML::TableExtract;
 use LWP::UserAgent;
 
 # Get the year from the commandline.
@@ -27,7 +28,7 @@ my $year = shift || 2012;
 my $filename = sprintf 'data/html-%d.txt', $year;
 
 # String to hold the harvest or read results.
-my $text = '';
+my $html = '';
 
 # Cache or harvest?
 if (-e $filename) {
@@ -36,19 +37,28 @@ if (-e $filename) {
     local $/;
     open my $input, '<', $filename or die "Can't read $filename: $!";
     # Set the text for matching.
-    $text = <$input>;
+    $html = <$input>;
 }
 else {
     # Harvest from wikipedia.
     my $url = 'https://en.wikipedia.org/wiki/';
     $url .= 'United_States_presidential_election,_' . $year;
     warn "Harvesting new data from entry: '$url'\n";
-    my $ua = LWP::UserAgent->new();
-    my $res = $ua->get($url);
-    $text = $res->content;
+    my $agent = LWP::UserAgent->new;
+    my $response = $agent->get($url);
 
     # Cache the raw entry.
+    $html = $response->content;
     open my $output, '>', $filename or die "Can't write to $filename: $!";
-    print $output $text;
+    print $output $html;
 }
 
+# Define a TableExtract object and parse the html entry with it.
+my $tex = HTML::TableExtract->new(depth => 0, count => 10);
+$tex->parse($html);
+# 
+for my $tab ($tex->tables) {
+    for my $row ($tab->rows) {
+        print join(',', map { defined $_ ? $_ : '' } @$row), "\n";
+    }
+}
