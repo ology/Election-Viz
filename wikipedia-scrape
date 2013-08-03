@@ -53,12 +53,25 @@ else {
     print $output $html;
 }
 
-# Define a TableExtract object and parse the html entry with it.
-my $tex = HTML::TableExtract->new(depth => 0, count => 10);
-$tex->parse($html);
-# 
-for my $tab ($tex->tables) {
-    for my $row ($tab->rows) {
-        print join(',', map { defined $_ ? $_ : '' } @$row), "\n";
+# Parse an entry with a TableExtract object.
+my $tx = HTML::TableExtract->new;
+$tx->parse($html);
+# Find the vote results by state table.
+my $found = 0;
+for my $tab ($tx->tables) {
+    if ($found) {
+        warn 'FOUND: Table [', join(',', $tab->coords), "]\n";
+        last;
+    }
+    else {
+        for my $row ($tab->rows) {
+            my $string = join ',', map { defined $_ ? $_ : '' } @$row;
+            if ( $string =~ /^Alabama,\d+,\d+,.+$/ ) {
+#                warn 'Table [', join(',', $tab->coords), "]\n";
+                $found++;
+                last;
+            }
+        }
+        redo if $found;
     }
 }
