@@ -2,16 +2,16 @@
 
 =head1 PROGRAM
 
-Convert the wikipedia C<wikitable> for presidential election results, by state,
-into a columnar data file.
+wikipedia-scrape
+
+=head1 DESCRIPTION
+
+Convert the wikipedia C<wikitable> for presidential election (votes) results by
+state, into a columnar data file.
 
 =head2 AUTHOR
 
 Gene Boggs C<gene plus github at ology dot net>
-
-=head2 TO DO
-
-Investigate L<MediaWiki::DumpFile>
 
 =cut
 
