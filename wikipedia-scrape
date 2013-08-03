@@ -33,24 +33,35 @@ my $html = cached($year, $filename);
 # Parse an entry with a TableExtract object.
 my $tx = HTML::TableExtract->new;
 $tx->parse($html);
+
 # Find the vote results by state table.
 my $found = 0;
 for my $tab ($tx->tables) {
+    # Process the results table, if found.
     if ($found) {
-        warn 'FOUND: Table [', join(',', $tab->coords), "]\n";
+        process_table($tab);
+        # This is the last table to consider.
         last;
     }
     else {
+        # Look for the right table.
         for my $row ($tab->rows) {
+            # Turn the row into a csv.
             my $string = join ',', map { defined $_ ? $_ : '' } @$row;
-            if ( $string =~ /^Alabama,\d+,\d+,.+$/ ) {
-#                warn 'Table [', join(',', $tab->coords), "]\n";
+            # Stop looking if the csv is a match.
+            if ( $string =~ /^Alabama,\d+,\d+,.+$/ ) { # XXX Naive but effective
                 $found++;
                 last;
             }
         }
+        # Rewind the rows if we've found the right table.
         redo if $found;
     }
+}
+
+sub process_table {
+    my $table = shift;
+    warn 'FOUND: Table [', join(',', $table->coords), "]\n";
 }
 
 sub cached { # Cache or harvest a wikipedia entry.
