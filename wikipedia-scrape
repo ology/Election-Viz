@@ -56,8 +56,7 @@ sub table_locate { # Find the right table in the entry.
             ($candidates, $data) = process_table($tab);
             # This is the last table to consider.
             last;
-        }
-        else {
+        } else {
             # Look for the right table.
             for my $row ($tab->rows) {
                 # Turn the row into a csv.
@@ -98,8 +97,7 @@ sub process_table { # Return candidates and data from the table.
             }
 
             push @data, $row;
-        }
-        else {
+        } else {
             # Save the sanitized candidate list.
             push @candidates,
                 grep { defined && !/^I|Margin|State Total$/ } @$row;
@@ -126,8 +124,7 @@ sub cached { # Cache or harvest a wikipedia entry.
         open my $input, '<', $filename or die "Can't read $filename: $!";
         # Set the text for matching.
         $html = <$input>;
-    }
-    else {
+    } else {
         # Harvest from wikipedia.
         my $url = 'https://en.wikipedia.org/wiki/';
         $url .= 'United_States_presidential_election,_' . $year;
