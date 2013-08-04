@@ -24,10 +24,7 @@ use LWP::UserAgent;
 # Get the year from the commandline.
 my $year = shift || 2012;
 
-# Set the signature for the "vote results by states" data table.
-my $fingerprint = qr/^Alabama,[\d-]+,.+$/;
-
-# Cached raw data file.
+# Cached data file.
 my $filename = sprintf 'data/%d.html', $year;
 
 # String to hold the harvest or read results.
@@ -52,7 +49,7 @@ for my $tab ($tx->tables) {
             # Turn the row into a csv.
             my $string = join ',', map { defined $_ ? $_ : '' } @$row;
             # Stop looking if the csv is a signature match.
-            if ( $string =~ $fingerprint ) {
+            if ( $string =~ /^Alabama,[\d-]+,.+$/ ) {
                 $found++;
                 last;
             }
