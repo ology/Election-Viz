@@ -25,7 +25,7 @@ use LWP::UserAgent;
 my $year = shift || 2012;
 
 # Set the signature for the "vote results by states" data table.
-my $fingerprint = qr/^Alabama,\d+,\d+,.+$/;
+my $fingerprint = qr/^Alabama,[\d-]+,.+$/;
 
 # Cached raw data file.
 my $filename = sprintf 'data/html-%d.txt', $year;
