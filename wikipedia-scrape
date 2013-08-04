@@ -65,6 +65,43 @@ for my $tab ($tx->tables) {
 sub process_table {
     my $table = shift;
     warn 'FOUND: Table [', join(',', $table->coords), "]\n";
+
+    my (@candidates, @data);
+    my $seen = 0;
+
+    # Look for the right table.
+    for my $row ($table->rows) {
+#        warn join('|', @$row), "\n";
+        if ( $seen || ($row->[0] && $row->[0] =~ /^State|Alabama$/) ) {
+            # Note that we have seen the data.
+            $seen++;
+
+            # Sanitize the record.
+            for my $cell ( @$row ) {
+                next unless $cell;
+                $cell =~ s/^.%$/%/;
+                $cell =~ s/,//g;
+            }
+
+            push @data, $row;
+        }
+        else {
+            # Save the sanitized candidate list.
+            push @candidates,
+                grep { defined && !/^I|Margin|State Total$/ } @$row;
+        }
+
+        # If none found, extract candidates from data header line.
+        unless ( @candidates ) {
+            # Save the sanitized candidate list.
+            push @candidates,
+                grep { defined && !/^%|Electors|Margin|State|Total?$/ } @{ $data[0] };
+        }
+    }
+# DEBUGGING:
+my $string = join '|', @candidates;
+#my $string = join "\n", map { join '|', @$_ } @data;
+print "$string\n";
 }
 
 sub cached { # Cache or harvest a wikipedia entry.
