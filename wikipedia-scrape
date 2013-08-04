@@ -85,7 +85,10 @@ sub cached { # Cache or harvest a wikipedia entry.
         warn "Harvesting new data from entry: '$url'\n";
         my $agent = LWP::UserAgent->new;
         my $response = $agent->get($url);
-        # Cache the raw entry.
+        # Die if no entry exists exists.
+        my $error = 'Wikipedia does not have an article with this exact name';
+        die "$error.\n" if $response->content =~ /$error/;
+        # Cache the entry.
         $html = $response->content;
         open my $output, '>', $filename or die "Can't write to $filename: $!";
         print $output $html;
