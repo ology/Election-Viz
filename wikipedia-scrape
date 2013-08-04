@@ -28,7 +28,7 @@ my $year = shift || 2012;
 my $fingerprint = qr/^Alabama,[\d-]+,.+$/;
 
 # Cached raw data file.
-my $filename = sprintf 'data/html-%d.txt', $year;
+my $filename = sprintf 'data/%d.html', $year;
 
 # String to hold the harvest or read results.
 my $html = cached($year, $filename);
