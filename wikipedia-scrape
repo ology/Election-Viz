@@ -4,10 +4,14 @@
 
 wikipedia-scrape
 
+=head1 USAGE
+
+ > perl wikipedia-scrape 1900 > 1900.dat
+
 =head1 DESCRIPTION
 
-Convert the wikipedia C<wikitable> for presidential election (votes) results by
-state, into a columnar data file.
+Convert the wikipedia table of presidential election results by state, into a
+columnar data file.
 
 =head2 AUTHOR
 
@@ -34,42 +38,52 @@ my $html = cached($year, $filename);
 my $tx = HTML::TableExtract->new;
 $tx->parse($html);
 
-# Declare election table parts.
-my ($candidates, $data);
+# Get the election results table parts.
+my ($candidates, $data) = table_locate($tx);
 
-# Find the right table.
-my $found = 0;
-for my $tab ($tx->tables) {
-    # Process the results table, if found.
-    if ($found) {
-        ($candidates, $data) = process_table($tab);
-        # This is the last table to consider.
-        last;
-    }
-    else {
-        # Look for the right table.
-        for my $row ($tab->rows) {
-            # Turn the row into a csv.
-            my $string = join ',', map { defined $_ ? $_ : '' } @$row;
-            # Stop looking if the csv is a signature match.
-            if ( $string =~ /^Alabama,[\d-]+,.+$/ ) {
-                $found++;
-                last;
-            }
+print join("\n", join("\t", @$candidates), join("\t", map { join("\t", @$_) } $data->[0]))
+    if @$candidates and @$data;
+
+sub table_locate { # Find the right table in the entry.
+    # Get a TableExtract object or fail.
+    my $tx = shift || die "ERROR: No TableExtract object given.\n";
+
+    # Traverse the tables, inspecing rows...
+    my $found = 0;
+    for my $tab ($tx->tables) {
+        # Process the results table, if found.
+        if ($found) {
+            ($candidates, $data) = process_table($tab);
+            # This is the last table to consider.
+            last;
         }
-        # Rewind the rows if we've found the right table.
-        redo if $found;
+        else {
+            # Look for the right table.
+            for my $row ($tab->rows) {
+                # Turn the row into a csv.
+                my $string = join ',', map { defined $_ ? $_ : '' } @$row;
+                # Stop looking if the csv is a signature match.
+                if ( $string =~ /^Alabama,[\d-]+,.+$/ ) {
+                    $found++;
+                    last;
+                }
+            }
+            # Rewind the rows if we've found the right table.
+            redo if $found;
+        }
     }
+
+    return $candidates, $data;
 }
 
-sub process_table {
+sub process_table { # Return candidates and data from the table.
     my $table = shift;
     warn 'FOUND: Table [', join(',', $table->coords), "]\n";
 
     my (@candidates, @data);
     my $seen = 0;
 
-    # Look for the right table.
+    # Parse out the candidates and data.
     for my $row ($table->rows) {
 #        warn join('|', @$row), "\n";
         if ( $seen || ($row->[0] && $row->[0] =~ /^State|Alabama$/) ) {
