@@ -76,8 +76,8 @@ sub process_table {
             # Sanitize the record.
             for my $cell ( @$row ) {
                 next unless $cell;
-                $cell =~ s/^.%$/%/;
-                $cell =~ s/,//g;
+                $cell =~ s/^.%$/%/; # TODO Replace ...
+                $cell =~ s/,//g; # Remove commas
             }
 
             push @data, $row;
