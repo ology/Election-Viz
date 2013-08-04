@@ -41,8 +41,10 @@ $tx->parse($html);
 # Get the election results table parts.
 my ($candidates, $data) = table_locate($tx);
 
-print join("\n", join("\t", @$candidates), join("\t", map { join("\t", @$_) } $data->[0]))
-    if @$candidates and @$data;
+print join("\n",
+    join("\t", @$candidates),
+    join("\|", map { join("\t", @$_) } $data->[0])
+) if @$candidates and @$data;
 
 sub table_locate { # Find the right table in the entry.
     # Get a TableExtract object or fail.
@@ -92,8 +94,10 @@ sub process_table { # Return candidates and data from the table.
             # Sanitize the record.
             for my $cell ( @$row ) {
                 next unless $cell;
-                $cell =~ s/^.%$/%/; # TODO Replace ...
-                $cell =~ s/,//g; # Remove commas
+                $cell =~ s/,//g; # Remove commas.
+                $cell =~ s/\n/ /g; # Replace newlines with a space.
+                $cell =~ s/\s+/ /g; # Collapse multiple spaces.
+#                $cell =~ s/^.%$/%/; # TODO Replace ...
             }
 
             push @data, $row;
@@ -109,6 +113,13 @@ sub process_table { # Return candidates and data from the table.
             push @candidates,
                 grep { defined && !/^%|Electors|Margin|State|Total?$/ } @{ $data[0] };
         }
+    }
+
+    for (@candidates) {
+        s/\n/ /g; # Replace newlines with a space.
+        s/\s+/ /g; # Collapse multiple spaces.
+#        s/^\s*//; # Trim leading spaces.
+#        s/\s*$//; # Trim trailing spaces.
     }
 
     return \@candidates, \@data;
