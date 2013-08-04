@@ -34,12 +34,15 @@ my $html = cached($year, $filename);
 my $tx = HTML::TableExtract->new;
 $tx->parse($html);
 
+# Declare election table parts.
+my ($candidates, $data);
+
 # Find the right table.
 my $found = 0;
 for my $tab ($tx->tables) {
     # Process the results table, if found.
     if ($found) {
-        process_table($tab);
+        ($candidates, $data) = process_table($tab);
         # This is the last table to consider.
         last;
     }
@@ -95,10 +98,8 @@ sub process_table {
                 grep { defined && !/^%|Electors|Margin|State|Total?$/ } @{ $data[0] };
         }
     }
-# DEBUGGING:
-my $string = join '|', @candidates;
-#my $string = join "\n", map { join '|', @$_ } @data;
-print "$string\n";
+
+    return \@candidates, \@data;
 }
 
 sub cached { # Cache or harvest a wikipedia entry.
