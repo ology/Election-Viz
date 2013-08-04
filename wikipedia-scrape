@@ -43,7 +43,7 @@ my ($candidates, $data) = table_locate($tx);
 
 print join("\n",
     join("\t", @$candidates),
-    join("\|", map { join("\t", @$_) } $data->[0])
+    join("\n", map { join("\t", @$_) } @$data)
 ) if @$candidates and @$data;
 
 sub table_locate { # Find the right table in the entry.
@@ -86,7 +86,6 @@ sub process_table { # Return candidates and data from the table.
 
     # Parse out the candidates and data.
     for my $row ($table->rows) {
-#        warn join('|', @$row), "\n";
         if ( $seen || ($row->[0] && $row->[0] =~ /^State|Alabama$/) ) {
             # Note that we have seen the data.
             $seen++;
@@ -97,7 +96,6 @@ sub process_table { # Return candidates and data from the table.
                 $cell =~ s/,//g; # Remove commas.
                 $cell =~ s/\n/ /g; # Replace newlines with a space.
                 $cell =~ s/\s+/ /g; # Collapse multiple spaces.
-#                $cell =~ s/^.%$/%/; # TODO Replace ...
             }
 
             push @data, $row;
@@ -118,8 +116,6 @@ sub process_table { # Return candidates and data from the table.
     for (@candidates) {
         s/\n/ /g; # Replace newlines with a space.
         s/\s+/ /g; # Collapse multiple spaces.
-#        s/^\s*//; # Trim leading spaces.
-#        s/\s*$//; # Trim trailing spaces.
     }
 
     return \@candidates, \@data;
