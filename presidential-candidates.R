@@ -46,8 +46,8 @@ for (file in filenames) {
       election$Votes,
       election$Votes.1,
       main = paste( title, '\nby popular vote in millions' ),
-      xlab = paste( names(candidates)[1], candidates[[1]], sep = ' - ' ),
-      ylab = paste( names(candidates)[2], candidates[[2]], sep = ' - ' ),
+      xlab = candidates[[1]],
+      ylab = candidates[[2]],
       xaxt = 'n', # Turn off default axis
       yaxt = 'n', # "
     );
