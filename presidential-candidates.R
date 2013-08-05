@@ -19,6 +19,9 @@ filenames <- list.files(
 
 # Process the elections into charts.
 for (file in filenames) {
+    # Build the chart title from the filename.
+    title <- paste( sub('^data/([0-9]+)\\.dat$', '\\1', file), 'US Presidential Election' );
+
     # Read the candidate data.
     candidates <- read.table(
         file,
@@ -26,9 +29,6 @@ for (file in filenames) {
         nrows  = 1,
         sep    = '\t',
     );
-
-    # Build the chart title from the filename.
-    title <- paste( gsub('^([0-9]+)\\.dat$', '\\1', file), 'US Presidential Election' );
 
     # Read the election data.
     election <- read.table(
