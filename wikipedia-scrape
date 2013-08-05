@@ -95,7 +95,7 @@ sub process_table { # Sanitize the table parts.
                 # Handle header data.
                 $cell ||= 'X'; # Undefined cells are Xs.
                 $cell =~ s/[^[:ascii:]]/-/g; # Replace non-ascii with -.
-                $cell =~ s/^\D+%$/P/g; # Replace a non-digit % with P.
+                $cell =~ s/^(?:\D+)?%$/P/g; # Replace a non-digit or lone % with P.
                 $cell =~ s/#/N/g; # Replace #s with Ns.
                 $cell =~ s/\n/ /g; # Replace newlines with a space.
                 $cell =~ s/\s+/ /g; # Collapse multiple spaces.
@@ -117,11 +117,11 @@ sub process_table { # Sanitize the table parts.
         unless ( @candidates ) {
             # Save the sanitized candidate list.
             push @candidates,
-                grep { defined && !/^P|Electors|Margin|State|Total?$/ } @{ $data[0] };
+                grep { defined && !/^(?:%|P|Electors|Margin|State|Total)?$/ } @{ $data[0] };
 
             # Normalize headers.
             for (@{ $data[0] }) {
-                $_ = 'N' unless /^(?:State|Electors|P|Margin|Total)?$/;
+                $_ = 'N' unless /^(?:%|P|Electors|Margin|State|Total)?$/;
             }
         }
     }
