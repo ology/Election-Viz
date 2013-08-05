@@ -35,7 +35,6 @@ for (file in filenames) {
         file,
         header     = TRUE,
         skip       = 1,
-        na.strings = '-',
         sep        = '\t',
     );
 
