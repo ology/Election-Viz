@@ -26,8 +26,6 @@ for (file in filenames) {
         nrows  = 1,
         sep    = '\t',
     );
-    # Convert "periods before letters" back to spaces, in candidate names.
-    names(candidates) <- gsub('[.]([A-Z])', ' \\1', names(candidates));
 
     # Build the chart title from the filename.
     title <- paste( gsub('^([0-9]+)\\.dat$', '\\1', file), 'US Presidential Election' );
@@ -40,11 +38,6 @@ for (file in filenames) {
         na.strings = '-',
         sep        = '\t',
     );
-
-    # Convert the winner numbers into integers.
-    election$Votes   <- as.numeric(gsub(',', '', election$Votes));
-    # Convert the loser numbers into integers.
-    election$Votes.1 <- as.numeric(gsub(',', '', election$Votes.1));
 
     # Open the graphics device to save our chart.
     png( paste(file, '.png', sep = '') );
