@@ -117,7 +117,7 @@ sub process_table { # Sanitize the table parts.
         unless ( @candidates ) {
             # Save the sanitized candidate list.
             push @candidates,
-                grep { defined && !/^%|Electors|Margin|State|Total?$/ } @{ $data[0] };
+                grep { defined && !/^P|Electors|Margin|State|Total?$/ } @{ $data[0] };
         }
     }
 
