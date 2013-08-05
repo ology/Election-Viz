@@ -22,7 +22,7 @@ for (file in filenames) {
     # Read the candidate data.
     candidates <- read.table(
         file,
-        header = TRUE,
+        header = FALSE,
         nrows  = 1,
         sep    = '\t',
     );
@@ -36,7 +36,7 @@ for (file in filenames) {
     election <- read.table(
         file,
         header     = TRUE,
-        skip       = 2,
+        skip       = 1,
         na.strings = '-',
         sep        = '\t',
     );
