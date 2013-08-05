@@ -94,10 +94,13 @@ sub process_table { # Sanitize the table parts.
             for my $cell ( @$row ) {
                 $cell ||= '-'; # Undefined cells are NA.
                 $cell =~ s/,//g; # Remove commas.
+                $cell =~ s/^\D+%$/%/g; # Replace a non-digit % with %.
                 $cell =~ s/\n/ /g; # Replace newlines with a space.
                 $cell =~ s/\s+/ /g; # Collapse multiple spaces.
+                $cell =~ s/^(total.+)$/#$1/ig; # Comment total line.
             }
 
+#            warn 'R: ',scalar(@$row),"\n"; # <- TESTING
             push @data, $row;
         } else {
             # Save the sanitized candidate list.
