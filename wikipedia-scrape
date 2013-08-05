@@ -95,7 +95,7 @@ sub process_table { # Sanitize the table parts.
                 $cell ||= 'X'; # Undefined cells are Xs.
                 $cell =~ s/#/N/g; # Replace #s with Ns.
                 $cell =~ s/,//g; # Remove commas.
-                $cell =~ s/^\D+%$/%/g; # Replace a non-digit % with %.
+                $cell =~ s/^\D+%$/P/g; # Replace a non-digit % with P.
                 $cell =~ s/\n/ /g; # Replace newlines with a space.
                 $cell =~ s/\s+/ /g; # Collapse multiple spaces.
                 $cell =~ s/^(total.+)$/#$1/ig; # Comment total line.
