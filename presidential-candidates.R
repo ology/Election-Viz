@@ -19,8 +19,11 @@ filenames <- list.files(
 
 # Process the elections into charts.
 for (file in filenames) {
-    # Build the chart title from the filename.
-    title <- paste( sub('^data/([0-9]+)\\.dat$', '\\1', file), 'US Presidential Election' );
+    # Get the year from the filename.
+    year <- sub('^data/([0-9]+)\\.dat$', '\\1', file);
+
+    # Build the chart title.
+    title <- paste( year, 'US Presidential Election' );
 
     # Read the candidate data.
     candidates <- read.table(
@@ -35,44 +38,30 @@ for (file in filenames) {
         file,
         header     = TRUE,
         skip       = 1,
+        na.strings = '-',
         sep        = '\t',
     );
 
     # Open the graphics device to save our chart.
-    png( paste(file, '.png', sep = '') );
+    png( paste('charts', '/', year, '.png', sep = '') );
 
     # Render the scatter plot.
     plot(
-      election$Votes,
-      election$Votes.1,
-      main = paste( title, '\nby popular vote in millions' ),
+      election$N,
+      election$N.1,
+      main = title,#paste( title, '\nby popular vote in millions' ),
       xlab = candidates[[1]],
       ylab = candidates[[2]],
-      xaxt = 'n', # Turn off default x-axis
-      yaxt = 'n', # Turn off default y-axis
+#      xaxt = 'n', # Turn off default x-axis
+#      yaxt = 'n', # Turn off default y-axis
     );
 
     # Scale the values.
     scale <- 1000000;
 
     # Draw the axes.
-    # XXX Clunky and tedious. TODO Apply a single scaling method.
-    axis( 1,
-        at     = c(0, max(election$Votes) / 2, max(election$Votes)),
-        labels = c(
-            0,
-            sprintf('%.2f', max(election$Votes) / scale / 2),
-            sprintf('%.2f', max(election$Votes) / scale)
-        ),
-    );
-    axis( 2,
-        at     = c(0, max(election$Votes.1) / 2, max(election$Votes.1)),
-        labels = c(
-            0,
-            sprintf('%.2f', max(election$Votes.1) / scale / 2),
-            sprintf('%.2f', max(election$Votes.1) / scale)
-        ),
-    );
+#    axis( 1, at = pretty(0:election$N,   n = 10) );
+#    axis( 2, at = pretty(0:election$N.1, n = 10) );
 
     # Draw a reference line.
     abline(
