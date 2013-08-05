@@ -92,12 +92,16 @@ sub process_table { # Sanitize the table parts.
 
             # Sanitize the record.
             for my $cell ( @$row ) {
+                # Handle header data.
                 $cell ||= 'X'; # Undefined cells are Xs.
-                $cell =~ s/#/N/g; # Replace #s with Ns.
-                $cell =~ s/,//g; # Remove commas.
+                $cell =~ s/[^[:ascii:]]/-/g; # Replace non-ascii with -.
                 $cell =~ s/^\D+%$/P/g; # Replace a non-digit % with P.
+                $cell =~ s/#/N/g; # Replace #s with Ns.
                 $cell =~ s/\n/ /g; # Replace newlines with a space.
                 $cell =~ s/\s+/ /g; # Collapse multiple spaces.
+                # Handle row data.
+                $cell =~ s/,//g; # Remove commas.
+                $cell =~ s/^([\d.-]+)%$/$1/g; # Remove the % sign from data.
                 $cell =~ s/^(total.+)$/#$1/ig; # Comment total line.
             }
 
