@@ -48,8 +48,8 @@ for (file in filenames) {
       main = paste( title, '\nby popular vote in millions' ),
       xlab = candidates[[1]],
       ylab = candidates[[2]],
-      xaxt = 'n', # Turn off default axis
-      yaxt = 'n', # "
+      xaxt = 'n', # Turn off default x-axis
+      yaxt = 'n', # Turn off default y-axis
     );
 
     # Scale the values.
