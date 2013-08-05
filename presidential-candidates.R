@@ -74,11 +74,11 @@ for (file in filenames) {
         ),
     );
 
-    # Draw a slope=1 reference line.
+    # Draw a reference line.
     abline(
       a   = 0,
-      b   = 1,
-      lty = 3,
+      b   = 1, # Slope=1
+      lty = 3, # Dashes
       col = 'blue'
     );
 
