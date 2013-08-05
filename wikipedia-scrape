@@ -113,11 +113,16 @@ sub process_table { # Sanitize the table parts.
                 grep { defined && !/^I|Margin|State Total$/ } @$row;
         }
 
-        # If none found, extract candidates from data header line.
+        # If none found, parse header.
         unless ( @candidates ) {
             # Save the sanitized candidate list.
             push @candidates,
                 grep { defined && !/^P|Electors|Margin|State|Total?$/ } @{ $data[0] };
+
+            # Normalize headers.
+            for (@{ $data[0] }) {
+                $_ = 'N' unless /^(?:State|Electors|P|Margin|Total)?$/;
+            }
         }
     }
 
