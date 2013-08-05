@@ -92,7 +92,8 @@ sub process_table { # Sanitize the table parts.
 
             # Sanitize the record.
             for my $cell ( @$row ) {
-                $cell ||= '-'; # Undefined cells are NA.
+                $cell ||= 'X'; # Undefined cells are Xs.
+                $cell =~ s/#/N/g; # Replace #s with Ns.
                 $cell =~ s/,//g; # Remove commas.
                 $cell =~ s/^\D+%$/%/g; # Replace a non-digit % with %.
                 $cell =~ s/\n/ /g; # Replace newlines with a space.
