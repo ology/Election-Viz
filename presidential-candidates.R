@@ -13,7 +13,7 @@
 # Collect the election data files.
 filenames <- list.files(
     'data',
-    pattern = '^[0-9]{4}.txt$',
+    pattern = '^[0-9]{4}.dat$',
     full.names = TRUE,
 );
 
@@ -30,7 +30,7 @@ for (file in filenames) {
     names(candidates) <- gsub('[.]([A-Z])', ' \\1', names(candidates));
 
     # Build the chart title from the filename.
-    title <- paste( gsub('^([0-9]+)\\.txt$', '\\1', file), 'US Presidential Election' );
+    title <- paste( gsub('^([0-9]+)\\.dat$', '\\1', file), 'US Presidential Election' );
 
     # Read the election data.
     election <- read.table(
