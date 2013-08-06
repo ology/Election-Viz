@@ -157,6 +157,7 @@ sub cached { # Cache or harvest a wikipedia entry.
         # Cache the entry.
         $html = $response->content;
         open my $output, '>', $filename or die "Can't write to $filename: $!";
+        binmode $output, ':utf8';
         print $output $html;
     }
     return $html;
