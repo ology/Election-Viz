@@ -97,8 +97,6 @@ sub process_table { # Sanitize the table parts.
                 $cell =~ s/[^[:ascii:]]+/-/g; # Replace consecutive non-ascii with -.
                 $cell =~ s/^(?:\D+)?%$/P/g; # Replace a non-digit or lone % with P.
                 $cell =~ s/#/N/g; # Replace #s with Ns.
-                $cell =~ s/\n/ /g; # Replace newlines with a space.
-                $cell =~ s/\s+/ /g; # Collapse multiple spaces.
                 # Handle row data.
                 $cell =~ s/,//g; # Remove commas.
                 $cell =~ s/^([\d.-]+)%$/$1/g; # Remove the % sign from data.
