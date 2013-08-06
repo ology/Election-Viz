@@ -105,7 +105,7 @@ sub process_table { # Sanitize the table parts.
                 # Handle row data.
                 $cell =~ s/,//g; # Remove commas.
                 $cell =~ s/^([\d.-]+)%$/$1/g; # Remove the % sign from data.
-                $cell =~ s/^((?:u\.s\.?\s*)?total.*)$/#$1/ig; # Comment total line.
+                $cell =~ s/^((?:u\.s\.?\s*)?total.*)$/#$1/ig; # Comment total lines.
 #                warn "\t'$cell'\n"; # <- TESTING
             }
 
