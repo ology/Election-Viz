@@ -137,20 +137,21 @@ sub process_table { # Sanitize the table parts.
             # Sanitize the record.
             for my $cell ( @$row ) {
 #                warn "C: '$cell'\n"; # <- TESTING
-                # Handle common data.
-                $cell = 'XX' unless defined $cell; # Make undefined cells Xs.
-                $cell =~ s/[[:^ascii:]]+/-/g; # Replace consecutive non-ascii with -.
                 # Handle header data.
                 if ($row->[0] =~ /^State$/) {
+                    $cell = 'XX' unless defined $cell; # Make undefined cells Xs.
                     $cell =~ s/^(?:\D+)?%$/P/g; # Replace a non-digit or lone % with P.
                     $cell =~ s/#/N/g; # Replace #s with Ns.
                     $cell = $min_space->($cell);
                 } else {
                     # Handle row data.
+                    $cell = '-' unless defined $cell; # Make undefined data cells -s.
                     $cell =~ s/,//g; # Remove commas.
                     $cell =~ s/^([\d.-]+)%$/$1/g; # Remove the % sign from data.
                     $cell =~ s/^((?:u\.s\.?\s*)?total.*)$/#$1/ig; # Comment total lines.
                 }
+                # Handle common data.
+                $cell =~ s/[[:^ascii:]]+/-/g; # Replace consecutive non-ascii with -.
 #                warn "\t'$cell'\n"; # <- TESTING
             }
 
