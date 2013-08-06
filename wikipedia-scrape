@@ -47,30 +47,30 @@ if ($year > 0) {
 
 # Inspect each year...
 for $year (@years) {
-# Cached data file.
-my $filename = sprintf 'data/%d.html', $year;
+    # Cached data file.
+    my $filename = sprintf 'data/%d.html', $year;
 
-# String to hold the harvest or read results.
-my $html = cached($year, $filename);
+    # String to hold the harvest or read results.
+    my $html = cached($year, $filename);
 
-# Parse an entry with a TableExtract object.
-my $tx = HTML::TableExtract->new;
-$tx->parse($html);
+    # Parse an entry with a TableExtract object.
+    my $tx = HTML::TableExtract->new;
+    $tx->parse($html);
 
-# Get the election results table parts.
-my ($candidates, $data) = table_locate($tx);
+    # Get the election results table parts.
+    my ($candidates, $data) = table_locate($tx);
 
-# Output the table, in tab-separated lines.
-if (@$candidates and @$data) {
-    my $dat_file = "data/$year.dat";
-    open my $dat, '>', $dat_file or die "Can't write to $dat_file: $!";
-    print $dat join("\n",
-        join("\t", @$candidates),
-        join("\n", map { join("\t", @$_) } @$data)
-    );
-} else {
-    warn "Cannot process $filename into candidates and data\n";
-}
+    # Output the table, in tab-separated lines.
+    if (@$candidates and @$data) {
+        my $dat_file = "data/$year.dat";
+        open my $dat, '>', $dat_file or die "Can't write to $dat_file: $!";
+        print $dat join("\n",
+            join("\t", @$candidates),
+            join("\n", map { join("\t", @$_) } @$data)
+        );
+    } else {
+        warn "Cannot process $filename into candidates and data\n";
+    }
 }
 
 sub table_locate { # Find the right table in the entry.
