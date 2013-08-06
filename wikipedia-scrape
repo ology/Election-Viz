@@ -6,7 +6,8 @@ wikipedia-scrape
 
 =head1 USAGE
 
- > perl wikipedia-scrape 1900 > 1900.dat
+ > perl wikipedia-scrape 1900 # => data/1900.dat
+ > perl wikipedia-scrape -1   # => 1900 - 2012
 
 =head1 DESCRIPTION
 
@@ -25,9 +26,26 @@ use warnings;
 use HTML::TableExtract;
 use LWP::UserAgent;
 
-# Get the year from the commandline.
-my $year = shift || 2012;
+# Known election years.
+my @years = (1900, 2012);
 
+# Get the year from the commandline.
+my $year = shift || $years[1];
+
+# Either look at a single year or all known years.
+if ($year > 0) {
+    @years = ($year);
+} else {
+    # Reset our years list.
+    @years = ();
+    # Construct the election year list.
+    for (my $i = $years[0]; $i <= $years[1]; $i = $i + 4) {
+        push @years, $i;
+    }
+}
+
+# Inspect each year...
+for $year (@years) {
 # Cached data file.
 my $filename = sprintf 'data/%d.html', $year;
 
@@ -52,10 +70,14 @@ if (@$candidates and @$data) {
 } else {
     warn "Cannot process $filename into candidates and data\n";
 }
+}
 
 sub table_locate { # Find the right table in the entry.
     # Get a TableExtract object or fail.
     my $tx = shift || die "ERROR: No TableExtract object given.\n";
+
+    # Get the election results table parts.
+    my ($candidates, $data);
 
     # Traverse the tables, inspecing rows...
     my $found = 0;
@@ -162,6 +184,9 @@ sub process_table { # Sanitize the table parts.
 sub cached { # Cache or harvest a wikipedia entry.
     my ($year, $filename) = @_;
 
+    # The file contents.
+    my $html = '';
+
     if (-e $filename) {
         warn "Cached data exists in $filename\n";
         # Read the cashed wikipedia text.
@@ -185,5 +210,6 @@ sub cached { # Cache or harvest a wikipedia entry.
         binmode $output, ':utf8';
         print $output $html;
     }
+
     return $html;
 }
