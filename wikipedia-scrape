@@ -43,7 +43,9 @@ my ($candidates, $data) = table_locate($tx);
 
 # Output the table, in tab-separated lines.
 if (@$candidates and @$data) {
-    print join("\n",
+    my $dat_file = "data/$year.dat";
+    open my $dat, '>', $dat_file or die "Can't write to $dat_file: $!";
+    print $dat join("\n",
         join("\t", @$candidates),
         join("\n", map { join("\t", @$_) } @$data)
     );
