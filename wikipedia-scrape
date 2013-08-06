@@ -138,6 +138,7 @@ sub process_table { # Sanitize the table parts.
 #                warn "C: '$cell'\n"; # <- TESTING
                 # Handle header data.
                 if ($row->[0] =~ /^State$/) {
+                    shift @$row; # Remove the first header cell.
                     $cell = 'XX' unless defined $cell; # Make undefined cells Xs.
                     $cell =~ s/^(?:\D+)?%$/P/g; # Replace a non-digit or lone % with P.
                     $cell =~ s/#/N/g; # Replace #s with Ns.
