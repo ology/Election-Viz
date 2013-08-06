@@ -50,7 +50,7 @@ for (file in filenames) {
     plot(
       election$N,
       election$N.1,
-      main = title,#paste( title, '\nby popular vote in millions' ),
+      main = paste(title, '\ndata harvested from Wikipedia'),
       xlab = candidates[[1]],
       ylab = candidates[[2]],
 #      xaxt = 'n', # Turn off default x-axis
