@@ -27,19 +27,20 @@ use HTML::TableExtract;
 use LWP::UserAgent;
 
 # Known election years.
-my @years = (1900, 2012);
+my @range = (1900, 2012);
 
 # Get the year from the commandline.
-my $year = shift || $years[1];
+my $year = shift || $range[1];
+
+# Declare the years to inspect.
+my @years = ();
 
 # Either look at a single year or all known years.
 if ($year > 0) {
-    @years = ($year);
+    push @years, $year;
 } else {
-    # Reset our years list.
-    @years = ();
     # Construct the election year list.
-    for (my $i = $years[0]; $i <= $years[1]; $i = $i + 4) {
+    for (my $i = $range[0]; $i <= $range[1]; $i = $i + 4) {
         push @years, $i;
     }
 }
