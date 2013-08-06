@@ -147,6 +147,7 @@ sub process_table { # Sanitize the table parts.
                     # Handle row data.
                     $cell = '-' unless defined $cell; # Make undefined data cells -s.
                     $cell =~ s/,//g; # Remove commas.
+                    $cell =~ s/ColumbiaDistrict of //g; # Remove artifact.
                     $cell =~ s/^([\d.-]+)%$/$1/g; # Remove the % sign from data.
                     $cell =~ s/^((?:u\.s\.?\s*)?total.*)$/#$1/ig; # Comment total lines.
                 }
