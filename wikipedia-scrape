@@ -178,8 +178,8 @@ sub process_table { # Sanitize the table parts.
 
     for (@candidates) {
         $_ = $min_space->($_);
-        $_ =~ s/\///; # Remove chars that R doesn't seem to like.
-        $_ =~ s/'//;  # "
+        $_ =~ s/\///g; # Remove chars that R doesn't seem to like.
+        $_ =~ s/'//g;  # "
     }
 
     return \@candidates, \@data;
