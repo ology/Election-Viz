@@ -81,11 +81,16 @@ sub process_table { # Sanitize the table parts.
     my $table = shift;
     warn 'FOUND: Table [', join(',', $table->coords), "]\n";
 
+    # Declare buckets for our table.
     my (@candidates, @data);
+
+    # Set the "locate-table" flag to FALSE.
     my $seen = 0;
 
+    # Items to exclude from the candidate list.
     my $exclude = qr/^(?:%|P|Electors|Margin|State|Total)?$/;
 
+    # Common sanitizing function.
     my $min_space = sub {
         my $string = shift;
         $string =~ s/\n/ /g; # Replace newlines with a space.
