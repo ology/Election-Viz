@@ -58,21 +58,20 @@ for (file in filenames) {
     );
 
     # Label points.
-    text(
-        election$N,
-        election$N.1,
-        row.names(election),
-        cex = 0.6,
-        pos = 4,
-        col = 'red',
-    );
-
-    # Identify datapoints.
-    identify(
-        election$N,
-        election$N.1,
-        labels = row.names(election),
-    );
+#    text(
+#        election$N,
+#        election$N.1,
+#        row.names(election),
+#        cex = 0.6,
+#        pos = 4,
+#        col = 'red',
+#    );
+    # Identify points for mouse-click.
+#    identify(
+#        election$N,
+#        election$N.1,
+#        labels = row.names(election),
+#    );
 
     # Scale the values.
     scale <- 1000000;
