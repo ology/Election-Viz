@@ -86,6 +86,13 @@ sub process_table { # Sanitize the table parts.
 
     my $exclude = qr/^(?:%|P|Electors|Margin|State|Total)?$/;
 
+    my $min_space = sub {
+        my $string = shift;
+        $string =~ s/\n/ /g; # Replace newlines with a space.
+        $string =~ s/\s+/ /g; # Collapse multiple spaces.
+        return $string;
+    };
+
     # Parse out the candidates and data.
     for my $row ($table->rows) {
         if ( $seen || ($row->[0] && $row->[0] =~ /^State|Alabama$/) ) {
@@ -101,6 +108,7 @@ sub process_table { # Sanitize the table parts.
                     $cell =~ s/[^[:ascii:]]+/-/g; # Replace consecutive non-ascii with -.
                     $cell =~ s/^(?:\D+)?%$/P/g; # Replace a non-digit or lone % with P.
                     $cell =~ s/#/N/g; # Replace #s with Ns.
+                    $cell = $min_space->($cell);
                 }
                 # Handle row data.
                 $cell =~ s/,//g; # Remove commas.
@@ -131,8 +139,7 @@ sub process_table { # Sanitize the table parts.
     }
 
     for (@candidates) {
-        s/\n/ /g; # Replace newlines with a space.
-        s/\s+/ /g; # Collapse multiple spaces.
+        $_ = $min_space->($_);
     }
 
     return \@candidates, \@data;
