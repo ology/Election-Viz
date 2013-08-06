@@ -58,7 +58,7 @@ for $year (@years) {
 
     # Output the table, in tab-separated lines.
     if (@$candidates and @$data) {
-        my $dat_file = "data/$year.dat";
+        my $dat_file = sprintf 'data/%d.dat', $year;
         open my $dat, '>', $dat_file or die "Can't write to $dat_file: $!";
         print $dat join("\n",
             join("\t", @$candidates),
