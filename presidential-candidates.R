@@ -44,6 +44,7 @@ for (file in filenames) {
 
     # Open the graphics device to save our chart.
     png( paste('charts', '/', year, '.png', sep = '') );
+#    quartz();
 
     # Render the scatter plot.
     plot(
@@ -54,6 +55,13 @@ for (file in filenames) {
       ylab = candidates[[2]],
 #      xaxt = 'n', # Turn off default x-axis
 #      yaxt = 'n', # Turn off default y-axis
+    );
+
+    # Identify datapoints.
+    identify(
+        election$N,
+        election$N.1,
+        labels = row.names(election),
     );
 
     # Scale the values.
