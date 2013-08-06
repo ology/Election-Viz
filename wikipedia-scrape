@@ -96,10 +96,12 @@ sub process_table { # Sanitize the table parts.
             for my $cell ( @$row ) {
 #                warn "C: '$cell'\n"; # <- TESTING
                 # Handle header data.
-                $cell = 'XX' unless defined $cell; # Make undefined cells Xs.
-                $cell =~ s/[^[:ascii:]]+/-/g; # Replace consecutive non-ascii with -.
-                $cell =~ s/^(?:\D+)?%$/P/g; # Replace a non-digit or lone % with P.
-                $cell =~ s/#/N/g; # Replace #s with Ns.
+                if ($row->[0] =~ /^State$/) {
+                    $cell = 'XX' unless defined $cell; # Make undefined cells Xs.
+                    $cell =~ s/[^[:ascii:]]+/-/g; # Replace consecutive non-ascii with -.
+                    $cell =~ s/^(?:\D+)?%$/P/g; # Replace a non-digit or lone % with P.
+                    $cell =~ s/#/N/g; # Replace #s with Ns.
+                }
                 # Handle row data.
                 $cell =~ s/,//g; # Remove commas.
                 $cell =~ s/^([\d.-]+)%$/$1/g; # Remove the % sign from data.
