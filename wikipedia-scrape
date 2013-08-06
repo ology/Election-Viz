@@ -84,6 +84,8 @@ sub process_table { # Sanitize the table parts.
     my (@candidates, @data);
     my $seen = 0;
 
+    my $exclude = qr/^(?:%|P|Electors|Margin|State|Total)?$/;
+
     # Parse out the candidates and data.
     for my $row ($table->rows) {
         if ( $seen || ($row->[0] && $row->[0] =~ /^State|Alabama$/) ) {
@@ -115,11 +117,11 @@ sub process_table { # Sanitize the table parts.
         unless ( @candidates ) {
             # Save the sanitized candidate list.
             push @candidates,
-                grep { defined && !/^(?:%|P|Electors|Margin|State|Total)?$/ } @{ $data[0] };
+                grep { defined && !/$exclude/ } @{ $data[0] };
 
             # Normalize headers.
             for (@{ $data[0] }) {
-                $_ = 'N' unless /^(?:%|P|Electors|Margin|State|Total)?$/;
+                $_ = 'N' unless /$exclude/;
             }
         }
     }
