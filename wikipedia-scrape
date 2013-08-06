@@ -94,6 +94,7 @@ sub process_table { # Sanitize the table parts.
 
             # Sanitize the record.
             for my $cell ( @$row ) {
+#                warn "C: '$cell'\n"; # <- TESTING
                 # Handle header data.
                 $cell = 'XX' unless defined $cell; # Make undefined cells Xs.
                 $cell =~ s/[^[:ascii:]]+/-/g; # Replace consecutive non-ascii with -.
@@ -103,6 +104,7 @@ sub process_table { # Sanitize the table parts.
                 $cell =~ s/,//g; # Remove commas.
                 $cell =~ s/^([\d.-]+)%$/$1/g; # Remove the % sign from data.
                 $cell =~ s/^((?:u\.s\.?\s*)?total.*)$/#$1/ig; # Comment total line.
+#                warn "\t'$cell'\n"; # <- TESTING
             }
 
 #            warn 'R: ',scalar(@$row),"\n"; # <- TESTING
