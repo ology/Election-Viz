@@ -1,5 +1,5 @@
-Obama	Romney	Johnson	Stein	Others
-State	Electors	N	P	N	P	N	P	N	P	N	P	Margin	P	Total
+Obama	Romney	Johnson	Stein	Others	#Total
+Electors	N	%	N	%	N	%	N	%	N	%	Margin	%	N
 Alabama	9	795696	38.36	1255925	60.55	12328	0.59	3397	0.16	6992	0.34	-460229	-22.19%	2074338
 Alaska	3	122640	40.81	164676	54.80	7392	2.46	2917	0.97	2870	0.96	-42036	-13.99%	300495
 Arizona	11	1025232	44.59	1233654	53.65	32100	1.40	7816	0.34	452	0.02	-208422	-9.06%	2299254
