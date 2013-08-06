@@ -57,6 +57,16 @@ for (file in filenames) {
 #      yaxt = 'n', # Turn off default y-axis
     );
 
+    # Label points.
+    text(
+        election$N,
+        election$N.1,
+        row.names(election),
+        cex = 0.6,
+        pos = 4,
+        col = 'red',
+    );
+
     # Identify datapoints.
     identify(
         election$N,
@@ -75,8 +85,19 @@ for (file in filenames) {
     abline(
       a   = 0,
       b   = 1, # Slope=1
-      lty = 3, # Dashes
+      lty = 3, # Dotted
       col = 'blue'
+    );
+
+    # Render a legend.
+    legend(
+        'bottomright',
+        c('State', 'slope=1'),
+        col = c('black', 'blue'),
+        pch = c('o', ''),
+        lty = c(0, 3),
+        lwd = c(0, 1),
+        inset = 0.05,
     );
 
     # Close the graphics device.
