@@ -94,7 +94,7 @@ sub process_table { # Sanitize the table parts.
             for my $cell ( @$row ) {
                 # Handle header data.
                 $cell = 'XX' unless defined $cell; # Make undefined cells Xs.
-                $cell =~ s/[^[:ascii:]]/-/g; # Replace non-ascii with -.
+                $cell =~ s/[^[:ascii:]]+/-/g; # Replace consecutive non-ascii with -.
                 $cell =~ s/^(?:\D+)?%$/P/g; # Replace a non-digit or lone % with P.
                 $cell =~ s/#/N/g; # Replace #s with Ns.
                 $cell =~ s/\n/ /g; # Replace newlines with a space.
