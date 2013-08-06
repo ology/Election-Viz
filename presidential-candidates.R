@@ -58,14 +58,15 @@ for (file in filenames) {
     );
 
     # Label points.
-#    text(
-#        election$N,
-#        election$N.1,
-#        row.names(election),
-#        cex = 0.6,
-#        pos = 4,
-#        col = 'red',
-#    );
+    row.names(election) <- election$State;
+    text(
+        election$N,
+        election$N.1,
+        row.names(election),
+        cex = 0.6,
+        pos = 4,
+        col = 'red',
+    );
     # Identify points for mouse-click.
 #    identify(
 #        election$N,
