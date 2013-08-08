@@ -8,7 +8,7 @@ This depends on the system having a plain vanilla
 [Perl](http://www.perl.org/get.html) with the CPAN module
 [HTML::TableExtractor](https://metacpan.org/module/HTML::TableExtractor).
 
-Then from the command prompt:
+Then from the command prompt, in the cloned git repo:
 
     perl wikipedia-scrape YYYY  # [1900-2012]
 
