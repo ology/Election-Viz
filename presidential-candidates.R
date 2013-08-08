@@ -47,10 +47,11 @@ for (file in filenames) {
 
     # Open the graphics device to save our chart.
     png( paste('charts', '/', year, '.png', sep = '') );
-#    quartz();
+#    quartz(); # <- Open interactive charting.
 
     # Render the scatter plot.
     if (plot_type == 'N') {
+        # By popular vote
         plot(
             election$N, election$N.1,
             main = paste(title, '\ndata harvested from Wikipedia'),
@@ -58,6 +59,7 @@ for (file in filenames) {
             ylab = candidates[[2]],
         );
     } else {
+        # By percent
         plot(
             election$P, election$P.1,
             main = paste(title, '\ndata harvested from Wikipedia'),
@@ -68,10 +70,11 @@ for (file in filenames) {
         );
     }
 
-    # 
     # Draw a reference line.
     abline(
+      # By popular vote
       a = ifelse(plot_type == 'N', 0, 100),
+      # By percent
       b = ifelse(plot_type == 'N', 1, -1),
       lty = 3, # Dotted
       col = 'blue'
@@ -80,6 +83,7 @@ for (file in filenames) {
     # Label points for state abbreviation.
     row.names(election) <- election$XX;
     if (plot_type == 'N') {
+        # By popular vote
         text(
             election$N, election$N.1,
             row.names(election),
@@ -88,6 +92,7 @@ for (file in filenames) {
             col = 'red',
         );
     } else {
+        # By percent
         text(
             election$P, election$P.1,
             row.names(election),
@@ -96,16 +101,18 @@ for (file in filenames) {
             col = 'red',
         );
     }
-    # Identify points for mouse-click.
+    # Identify points for mouse-click interactive charting.
 #    identify(
 #        election$P,
 #        election$P.1,
 #        labels = row.names(election),
 #    );
 
-    # Render a legend.
+    # Set the legend slope by votes or percent.
     slope <- ifelse(plot_type == 'N', 1, -1);
+    # Render a legend.
     legend(
+        # Toggle for popular vote or percent.
         ifelse(plot_type == 'N', 'bottomright', 'topright'),
         c('State', paste('slope =', slope)),
         col = c('black', 'blue'),
