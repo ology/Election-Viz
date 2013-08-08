@@ -23,6 +23,6 @@ argument to **wikipedia-scrape** will harvest the entire 1900-2012 range of year
 
     source('presidential-candidates.R')
 
-This will produce individual _PNG_ charts for each year in the _charts/_
-subdirectory.
+This will read the harvested data files and produce individual _PNG_ charts for
+each year in the _charts/_ subdirectory.
 
