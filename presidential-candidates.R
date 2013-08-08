@@ -77,7 +77,7 @@ for (file in filenames) {
       col = 'blue'
     );
 
-    # Label points.
+    # Label points for state abbreviation.
     row.names(election) <- election$XX;
     if (plot_type == 'N') {
         text(
