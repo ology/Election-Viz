@@ -3,12 +3,12 @@ Election-Viz
 
 Visualize two candidates in a U.S. presidential election.
 
-This depends on the system having a plain vanilla
+1. This depends on the system having a plain vanilla
 [R](http://cran.r-project.org/mirrors.html) installed and
 [Perl](http://www.perl.org/get.html) with the CPAN module
 [HTML::TableExtractor](https://metacpan.org/module/HTML::TableExtractor).
 
-Then from the command prompt, in the cloned git repo:
+2. Then from the command prompt, in the cloned git repo:
 
     perl wikipedia-scrape YYYY  # [1900-2012]
 
@@ -19,7 +19,7 @@ in the _data/_ subdirectory.
 Do this for as many years as you want.  Providing _-1_ instead of a _YYYY_
 argument to **wikipedia-scrape** will harvest the entire 1900-2012 range of years.
 
-Next run **R** and
+3. Next run **R** and
 
     source('presidential-candidates.R')
 
