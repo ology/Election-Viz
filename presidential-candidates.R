@@ -10,6 +10,9 @@
 # -- gene+github@ology.net
 #
 
+# Type of plot: [N]umeric or [P]ercent
+plot_type <- 'N';
+
 # Collect the election data files.
 filenames <- list.files(
     'data',
@@ -47,52 +50,64 @@ for (file in filenames) {
 #    quartz();
 
     # Render the scatter plot.
-    plot(
-      election$N,
-      election$N.1,
-      main = paste(title, '\ndata harvested from Wikipedia'),
-      xlab = candidates[[1]],
-      ylab = candidates[[2]],
-#      xaxt = 'n', # Turn off default x-axis
-#      yaxt = 'n', # Turn off default y-axis
-    );
+    if (plot_type == 'N') {
+        plot(
+            election$N, election$N.1,
+            main = paste(title, '\ndata harvested from Wikipedia'),
+            xlab = candidates[[1]],
+            ylab = candidates[[2]],
+        );
+    } else {
+        plot(
+            election$P, election$P.1,
+            main = paste(title, '\ndata harvested from Wikipedia'),
+            xlab = candidates[[1]],
+            ylab = candidates[[2]],
+            xlim = c(0, 100),
+            ylim = c(0, 100),
+        );
+    }
 
-    # Label points.
-    row.names(election) <- election$State;
-    text(
-        election$N,
-        election$N.1,
-        row.names(election),
-        cex = 0.6,
-        pos = 4,
-        col = 'red',
-    );
-    # Identify points for mouse-click.
-#    identify(
-#        election$N,
-#        election$N.1,
-#        labels = row.names(election),
-#    );
-
-    # Scale the values.
-    scale <- 1000000;
-
-    # Draw the axes.
-#    axis( 1, at = pretty(0:election$N,   n = 10) );
-#    axis( 2, at = pretty(0:election$N.1, n = 10) );
-
+    # 
     # Draw a reference line.
     abline(
-      a   = 0,
-      b   = 1, # Slope=1
+      a = ifelse(plot_type == 'N', 0, 100),
+      b = ifelse(plot_type == 'N', 1, -1),
       lty = 3, # Dotted
       col = 'blue'
     );
 
+    # Label points.
+    row.names(election) <- election$XX;
+    if (plot_type == 'N') {
+        text(
+            election$N, election$N.1,
+            row.names(election),
+            cex = 0.6,
+            pos = 4,
+            col = 'red',
+        );
+    } else {
+        text(
+            election$P, election$P.1,
+            row.names(election),
+            cex = 0.6,
+            pos = 4,
+            col = 'red',
+        );
+    }
+    # Identify points for mouse-click.
+#    identify(
+#        election$P,
+#        election$P.1,
+#        labels = row.names(election),
+#    );
+
     # Render a legend.
+    slope <- ifelse(plot_type == 'N', 1, -1);
     legend(
-        'bottomright',
-        c('State', 'slope=1'),
+        ifelse(plot_type == 'N', 'bottomright', 'topright'),
+        c('State', paste('slope =', slope)),
         col = c('black', 'blue'),
         pch = c('o', ''),
         lty = c(0, 3),
