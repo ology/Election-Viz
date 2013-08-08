@@ -12,6 +12,8 @@
 
 # Type of plot: [N]umeric or [P]ercent
 plot_type <- 'N';
+# Show state abbreviation/name labels.
+show_labels <- 1;
 
 # Collect the election data files.
 filenames <- list.files(
@@ -80,33 +82,43 @@ for (file in filenames) {
       col = 'blue'
     );
 
-    # Label points for state abbreviation.
-    row.names(election) <- election$XX;
-    if (plot_type == 'N') {
-        # By popular vote
-        text(
-            election$N, election$N.1,
-            row.names(election),
-            cex = 0.6,
-            pos = 4,
-            col = 'red',
-        );
-    } else {
-        # By percent
-        text(
-            election$P, election$P.1,
-            row.names(election),
-            cex = 0.6,
-            pos = 4,
-            col = 'red',
-        );
+    # Draw labels if requested.
+    if (show_labels > 0) {
+        # Label points for abbreviation or state.
+        abbrev <- names(election)[names(election) == 'XX'];
+        if (length(abbrev) == 0) {
+            row.names(election) <- election$State;
+        }
+        else {
+            row.names(election) <- election$XX;
+        }
+        # Add labels to the plot.
+        if (plot_type == 'N') {
+            # By popular vote
+            text(
+                election$N, election$N.1,
+                row.names(election),
+                cex = 0.6,
+                pos = 4,
+                col = 'red',
+            );
+        } else {
+            # By percent
+            text(
+                election$P, election$P.1,
+                row.names(election),
+                cex = 0.6,
+                pos = 4,
+                col = 'red',
+            );
+        }
+        # Identify points for mouse-click interactive charting.
+    #    identify(
+    #        election$P,
+    #        election$P.1,
+    #        labels = row.names(election),
+    #    );
     }
-    # Identify points for mouse-click interactive charting.
-#    identify(
-#        election$P,
-#        election$P.1,
-#        labels = row.names(election),
-#    );
 
     # Set the legend slope by votes or percent.
     slope <- ifelse(plot_type == 'N', 1, -1);
