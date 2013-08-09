@@ -28,6 +28,9 @@ each year in the *charts/* subdirectory.
 
 * Open the presidential-candidates.R code in an editor, change the *plot_type*
 from **N**umber of popular votes to **P**ercent of votes, save and re-source in
-your R window.
+your R window.  The relevant charts/*.png files will be refreshed.
+
+Also, if you want to use a different graphics driver or save format, change the
+relevant R *png()* or *quartz()* statements, while in your editor.
 
 Voilà!
