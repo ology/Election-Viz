@@ -177,6 +177,7 @@ sub process_table { # Sanitize the table parts.
         }
     }
 
+    # Sanitize the candidates.
     for (@candidates) {
         $_ = $min_space->($_);
         $_ =~ s/\///g; # Remove chars that R doesn't seem to like.
