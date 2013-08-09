@@ -27,7 +27,7 @@ This will read the harvested data files and produce individual *PNG* charts for
 each year in the *charts/* subdirectory.
 
 * Open the presidential-candidates.R code in an editor, change the *plot_type*
-from **N**umber of popular votes to **P**ercent of votes and re-source in your R
-window.
+from **N**umber of popular votes to **P**ercent of votes, save and re-source in
+your R window.
 
 Voilà!
