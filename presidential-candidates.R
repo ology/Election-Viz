@@ -11,7 +11,7 @@
 #
 
 # Type of plot: [N]umeric or [P]ercent
-plot_type <- 'N';
+plot_type <- 'P';
 # Show state abbreviation/name labels.
 show_labels <- 1;
 
@@ -30,6 +30,8 @@ for (file in filenames) {
     # Build the chart title.
     title <- paste( year, 'US Presidential Election' );
 
+    cat(paste('Building image file for', title, '...'));
+
     # Read the candidate data.
     candidates <- read.table(
         file,
@@ -47,8 +49,10 @@ for (file in filenames) {
         sep        = '\t',
     );
 
+    image_file <- paste('charts', '/', year, '.png', sep = '');
+
     # Open the graphics device to save our chart.
-    png( paste('charts', '/', year, '.png', sep = '') );
+    png(image_file);
 #    quartz(); # <- Open interactive charting.
 
     # Render the scatter plot.
@@ -136,4 +140,6 @@ for (file in filenames) {
 
     # Close the graphics device.
     dev.off();
+
+    cat(paste('Wrote image file:', image_file));
 }
